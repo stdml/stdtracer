@@ -28,11 +28,10 @@ struct xterm_t {
         e;                                                                     \
     }
 
-template <typename T>
-std::chrono::duration<T>
-since(const std::chrono::time_point<std::chrono::system_clock> &t0)
+template <typename T, typename clock_t>
+std::chrono::duration<T> since(const std::chrono::time_point<clock_t> &t0)
 {
-    return std::chrono::system_clock::now() - t0;
+    return clock_t::now() - t0;
 }
 
 tracer_ctx_t::~tracer_ctx_t()
@@ -47,7 +46,7 @@ tracer_ctx_t::~tracer_ctx_t()
 
 void tracer_ctx_t::report(FILE *fp) const
 {
-    const auto total = since<double>(t0);
+    const auto total = since<double, clock_t>(t0);
     using item_t = std::tuple<duration_t, uint32_t, std::string>;
     std::vector<item_t> list;
     // for (const auto [name, duration] : total_durations) {
@@ -91,7 +90,7 @@ void tracer_ctx_t::indent(FILE *fp)
 tracer_ctx_t default_tracer_ctx("global");
 
 tracer_t::tracer_t(const std::string &name, tracer_ctx_t &ctx)
-    : name(name), t0(std::chrono::system_clock::now()), ctx(ctx)
+    : name(name), t0(clock_t::now()), ctx(ctx)
 {
     ctx.indent();
     WITH_XTERM(1, 35, printf("{ // [%s]", name.c_str()));

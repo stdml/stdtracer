@@ -7,7 +7,10 @@
 
 struct tracer_ctx_t {
     const std::string name;
-    const std::chrono::time_point<std::chrono::system_clock> t0;
+
+    using clock_t = std::chrono::high_resolution_clock;
+    const std::chrono::time_point<clock_t> t0;
+
     int depth;
 
     using duration_t = std::chrono::duration<double>;
@@ -16,7 +19,7 @@ struct tracer_ctx_t {
     std::deque<FILE *> log_files;
 
     explicit tracer_ctx_t(const std::string &name)
-        : name(name), t0(std::chrono::system_clock::now()), depth(0)
+        : name(name), t0(clock_t::now()), depth(0)
     {
         log_files.push_front(stdout);
     }
@@ -50,7 +53,10 @@ struct tracer_ctx_t {
 
 struct tracer_t {
     const std::string name;
-    const std::chrono::time_point<std::chrono::system_clock> t0;
+
+    using clock_t = std::chrono::high_resolution_clock;
+    const std::chrono::time_point<clock_t> t0;
+
     tracer_ctx_t &ctx;
 
     tracer_t(const std::string &, tracer_ctx_t &);
