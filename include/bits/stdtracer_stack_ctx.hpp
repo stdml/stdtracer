@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <chrono>
 #include <map>
 #include <stack>
@@ -51,11 +52,11 @@ template <typename clock_t, typename duration_t> class stack_tracer_ctx_t_
         std::sort(list.rbegin(), list.rend());
 
         const std::string hr(80, '-');
-        fprintf(fp, "\tsummary of %s::%s (%fs)\n", "tracer_ctx_t",  //
+        fprintf(fp, "\tinvoke tree of %s::%s (%fs)\n", "stack_tracer_ctx_t_",
                 name.c_str(), total.count());
         fprintf(fp, "%s\n", hr.c_str());
         fprintf(fp, "%8s    %16s    %12s    %12s    %s\n",  //
-                "count", "cumulative (s)", "%", "mean (ms)", "call site");
+                "count", "cumulative (s)", "%", "mean (ms)", "call chain");
         fprintf(fp, "%s\n", hr.c_str());
         // for (const auto &[duration, count, name] : list) {
         for (const auto &it : list) {
