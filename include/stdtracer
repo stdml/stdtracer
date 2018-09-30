@@ -1,8 +1,22 @@
 #pragma
 
-#include <bits/stdtracer_scope.hpp>
+// trace contexts
+#include <bits/stdtracer_log_ctx.hpp>
 #include <bits/stdtracer_stack_ctx.hpp>
-#include <tracer.hpp>
+
+// trace scopes
+#include <bits/stdtracer_scope.hpp>
+
+using stack_tracer_ctx_t =
+    stack_tracer_ctx_t_<std::chrono::high_resolution_clock,
+                        std::chrono::duration<double>>;
+
+using log_tracer_ctx_t = log_tracer_ctx_t_<std::chrono::high_resolution_clock,
+                                           std::chrono::duration<double>>;
+
+using tracer_t = scope_t_<log_tracer_ctx_t>;
+
+extern log_tracer_ctx_t default_tracer_ctx;
 
 #define TRACE(name) tracer_t _((name), default_tracer_ctx)
 
@@ -16,4 +30,21 @@
 
 #define TRACE_NAME(name, e) _TRACE_WITH_NAME(std::string(#e "::") + name, e);
 
-#define SET_TRACE_LOG(name) set_trace_log_t ___(name)
+#define SET_TRACE_LOG(name)                                                    \
+    set_trace_log_t<log_tracer_ctx_t> ___((name), default_tracer_ctx)
+
+template <bool enable = false, typename F, typename... Arg>
+void trace_call(const std::string &name, F &f, Arg &... args)
+{
+    if (enable) {
+        tracer_t _(name, default_tracer_ctx);
+        f(args...);
+    } else {
+        f(args...);
+    }
+}
+
+template <typename... Args> void logf(const Args &... args)
+{
+    default_tracer_ctx.logf(args...);
+}

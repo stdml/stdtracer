@@ -21,3 +21,31 @@ class scope_t_
     const std::chrono::time_point<clock_t> t0;
     ctx_t &ctx;
 };
+
+template <typename log_ctx_t> class set_trace_log_t
+{
+  public:
+    set_trace_log_t(const std::string &name, log_ctx_t &ctx, bool reuse = false)
+        : name(name), ctx(ctx)
+    {
+        FILE *fp = reuse  //
+                       ? std::fopen(name.c_str(), "a")
+                       : std::fopen(name.c_str(), "w");
+        ctx.log_files.push_front(fp);
+        ctx.indent();
+        ctx.logf1(stdout, "start logging to %s", name.c_str());
+    }
+
+    ~set_trace_log_t()
+    {
+        ctx.indent();
+        ctx.logf1(stdout, "stop logging to file://%s", name.c_str());
+        FILE *fp = ctx.log_files.front();
+        ctx.log_files.pop_front();
+        std::fclose(fp);
+    }
+
+  private:
+    const std::string name;
+    log_ctx_t &ctx;
+};

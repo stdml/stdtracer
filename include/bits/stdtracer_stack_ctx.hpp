@@ -110,7 +110,3 @@ template <typename clock_t, typename duration_t> class stack_tracer_ctx_t_
         return ss;
     }
 };
-
-using stack_tracer_ctx_t =
-    stack_tracer_ctx_t_<std::chrono::high_resolution_clock,
-                        std::chrono::duration<double>>;
