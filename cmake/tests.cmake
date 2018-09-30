@@ -1,0 +1,5 @@
+ADD_EXECUTABLE(test-1 tests/test_1.cpp)
+TARGET_INCLUDE_DIRECTORIES(test-1 PRIVATE ${CMAKE_SOURCE_DIR}/include)
+TARGET_LINK_LIBRARIES(test-1 stdtracer gtest)
+
+ADD_TEST(NAME test-1 COMMAND test-1)

@@ -9,9 +9,6 @@ SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 ADD_LIBRARY(stdtracer src/tracer.cpp)
 TARGET_INCLUDE_DIRECTORIES(stdtracer PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-ADD_EXECUTABLE(test-1 tests/test_1.cpp)
-TARGET_INCLUDE_DIRECTORIES(test-1 PRIVATE ${CMAKE_SOURCE_DIR}/include)
-TARGET_LINK_LIBRARIES(test-1 stdtracer gtest)
-
 ENABLE_TESTING()
-ADD_TEST(NAME test-1 COMMAND test-1)
+# INCLUDE(cmake/tests.cmake)
+INCLUDE(cmake/examples.cmake)
