@@ -1,6 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <chrono>
+#include <cstring>
 #include <map>
 #include <sstream>
 #include <stack>
