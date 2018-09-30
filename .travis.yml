@@ -1,4 +1,4 @@
 language: cpp
 
 before_install:
-- sudo apt install -y libgtest
+- sudo apt install -y libgtest-dev
