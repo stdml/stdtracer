@@ -68,20 +68,6 @@ struct set_trace_log_t {
     ~set_trace_log_t();
 };
 
-#define TRACE(name) tracer_t _((name), default_tracer_ctx)
-
-#define _TRACE_WITH_NAMD(name, e)                                              \
-    {                                                                          \
-        tracer_t _(name, default_tracer_ctx);                                  \
-        e;                                                                     \
-    }
-
-#define TRACE_IT(e) _TRACE_WITH_NAMD(#e, e);
-
-#define TRACE_NAME(name, e) _TRACE_WITH_NAMD(std::string(#e "::") + name, e);
-
-#define SET_TRACE_LOG(name) set_trace_log_t ___(name)
-
 template <typename... Args> void logf(const Args &... args)
 {
     default_tracer_ctx.logf(args...);
