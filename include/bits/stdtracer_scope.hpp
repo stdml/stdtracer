@@ -2,6 +2,8 @@
 #include <chrono>
 #include <string>
 
+#include "stdtracer_base.hpp"
+
 template <typename ctx_t, typename clock_t = std::chrono::high_resolution_clock>
 class scope_t_
 {
@@ -12,22 +14,10 @@ class scope_t_
         ctx.in(name);
     }
 
-    ~scope_t_()
-    {
-        const auto d = since<double>(t0);
-        ctx.out(name, d);
-    }
+    ~scope_t_() { ctx.out(name, since<double, clock_t>(t0)); }
 
   private:
     const std::string name;
-
     const std::chrono::time_point<clock_t> t0;
-
     ctx_t &ctx;
-
-    template <typename T>
-    std::chrono::duration<T> since(const std::chrono::time_point<clock_t> &t0)
-    {
-        return clock_t::now() - t0;
-    }
 };

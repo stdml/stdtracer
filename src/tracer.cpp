@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 
+#include <bits/stdtracer_base.hpp>
 #include <tracer.hpp>
 
 struct xterm_t {
@@ -27,12 +28,6 @@ struct xterm_t {
         xterm_t _(b, f);                                                       \
         e;                                                                     \
     }
-
-template <typename T, typename clock_t>
-std::chrono::duration<T> since(const std::chrono::time_point<clock_t> &t0)
-{
-    return clock_t::now() - t0;
-}
 
 tracer_ctx_t::~tracer_ctx_t()
 {

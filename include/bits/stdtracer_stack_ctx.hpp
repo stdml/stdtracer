@@ -8,14 +8,10 @@
 #include <tuple>
 #include <vector>
 
+#include "stdtracer_base.hpp"
+
 template <typename clock_t, typename duration_t> class stack_tracer_ctx_t_
 {
-    template <typename T>
-    std::chrono::duration<T> since(const std::chrono::time_point<clock_t> &t0)
-    {
-        return clock_t::now() - t0;
-    }
-
   public:
     stack_tracer_ctx_t_(const std::string &name)
         : name(name), t0(clock_t::now()), call_stack_str("")
