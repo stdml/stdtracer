@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <chrono>
 #include <map>
+#include <sstream>
 #include <stack>
 #include <string>
 #include <tuple>
@@ -62,7 +63,7 @@ template <typename clock_t, typename duration_t> class stack_tracer_ctx_t_
         for (const auto &it : list) {
             const auto duration = std::get<0>(it);
             const auto count = std::get<1>(it);
-            const auto name = std::get<2>(it);
+            const auto name = decode_call_stack_str(std::get<2>(it));
             fprintf(fp, "%8d    %16f    %12.2f    %12.4f    %s\n",  //
                     count, duration.count(), duration * 100 / total,
                     1000 * duration.count() / count, name.c_str());
@@ -89,6 +90,28 @@ template <typename clock_t, typename duration_t> class stack_tracer_ctx_t_
         names.push_back(name);
         index[name] = idx;
         return idx;
+    }
+
+    static std::vector<std::string> split(const std::string &text,
+                                          const char sep)
+    {
+        std::vector<std::string> lines;
+        std::string line;
+        std::istringstream ss(text);
+        while (std::getline(ss, line, sep)) {
+            if (!line.empty()) { lines.push_back(line); }
+        }
+        return lines;
+    }
+
+    std::string decode_call_stack_str(const std::string &call_ss)
+    {
+        std::string ss;
+        for (const auto &s : split(call_ss, '/')) {
+            const int idx = std::stoi(s);
+            ss += "/" + names[idx];
+        }
+        return ss;
     }
 };
 
