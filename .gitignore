@@ -31,11 +31,16 @@
 *.out
 *.app
 
+_CPack_Packages
+*.log
+*.tar.gz
 /bin
+/Testing
 cmake_install.cmake
 CMakeCache.txt
 CMakeFiles
+CPackConfig.cmake
+CPackSourceConfig.cmake
 CTestTestfile.cmake
-/Testing
+install_manifest.txt
 Makefile
-*.log
