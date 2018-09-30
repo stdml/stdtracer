@@ -1,5 +1,7 @@
 #pragma
 
+#include <bits/stdtracer_scope.hpp>
+#include <bits/stdtracer_stack_ctx.hpp>
 #include <tracer.hpp>
 
 #define TRACE(name) tracer_t _((name), default_tracer_ctx)
