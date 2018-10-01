@@ -1,11 +1,11 @@
 // TODO: show invoke tree
 #include <stdtracer>
 
-using scope_t = scope_t_<stack_tracer_ctx_t>;
+using tracer_t = scope_t_<stack_tracer_ctx_t>;
 
 stack_tracer_ctx_t default_stack_tracer_ctx("global");
 
-#define TRACE(name) scope_t _((name), default_stack_tracer_ctx)
+#define TRACE(name) tracer_t _((name), default_stack_tracer_ctx)
 
 int fibo(int n)
 {
