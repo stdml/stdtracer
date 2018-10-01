@@ -1,11 +1,11 @@
 #pragma once
 #include <algorithm>
 #include <chrono>
-#include <map>
 #include <sstream>
 #include <stack>
 #include <string>
 #include <tuple>
+#include <unordered_map>
 #include <vector>
 
 #include "stdtracer_base.hpp"
@@ -72,11 +72,11 @@ template <typename clock_t, typename duration_t> class stack_tracer_ctx_t_
 
     std::string call_stack_str;
 
-    std::map<std::string, int> index;
+    std::unordered_map<std::string, int> index;
     std::vector<std::string> names;
 
     using call_info_t = std::pair<uint32_t, duration_t>;
-    std::map<std::string, call_info_t> call_info_map;
+    std::unordered_map<std::string, call_info_t> call_info_map;
 
     int get_idx(const std::string &name)
     {

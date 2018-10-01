@@ -1,8 +1,8 @@
 #pragma once
 #include <algorithm>
 #include <cstdio>
-#include <map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "stdtracer_base.hpp"
@@ -29,8 +29,10 @@ template <typename clock_t, typename duration_t> class simple_tracer_ctx_t_
 
     void out(const std::string &name, const duration_t &d)
     {
-        total_durations[name] += d;
-        ++call_times[name];
+        auto &info = call_info_map[name];
+        ++info.first;
+        info.second += d;
+
         --depth;
     }
 
@@ -40,8 +42,8 @@ template <typename clock_t, typename duration_t> class simple_tracer_ctx_t_
 
     int depth;
 
-    std::map<std::string, duration_t> total_durations;
-    std::map<std::string, uint32_t> call_times;
+    using call_info_t = std::pair<uint32_t, duration_t>;
+    std::unordered_map<std::string, call_info_t> call_info_map;
 
     void report(FILE *fp) const
     {
@@ -49,10 +51,11 @@ template <typename clock_t, typename duration_t> class simple_tracer_ctx_t_
         using item_t = std::tuple<duration_t, uint32_t, std::string>;
         std::vector<item_t> list;
         // for (const auto [name, duration] : total_durations) {
-        for (const auto &it : total_durations) {
+        for (const auto &it : call_info_map) {
             const auto name = it.first;
-            const auto duration = it.second;
-            list.push_back(item_t(duration, call_times.at(name), name));
+            const auto call_times = it.second.first;
+            const auto duration = it.second.second;
+            list.push_back(item_t(duration, call_times, name));
         }
         std::sort(list.rbegin(), list.rend());
 
