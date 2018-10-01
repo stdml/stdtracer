@@ -16,4 +16,4 @@
 #define TRACE_NAME(name, e) _TRACE_WITH_NAME(std::string(#e "::") + name, e);
 
 #define SET_TRACE_LOG(name)                                                    \
-    set_trace_log_t<log_tracer_ctx_t> ___((name), default_tracer_ctx)
+    set_trace_log_t<log_tracer_ctx_t> ___((name), default_log_ctx)
