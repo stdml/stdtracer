@@ -9,7 +9,10 @@ SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 ADD_LIBRARY(stdtracer src/tracer.cpp)
 TARGET_INCLUDE_DIRECTORIES(stdtracer PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
+INSTALL(TARGETS stdtracer ARCHIVE DESTINATION lib)
+INSTALL(DIRECTORY include DESTINATION .)
+
 ENABLE_TESTING()
 # INCLUDE(cmake/tests.cmake)
 INCLUDE(cmake/examples.cmake)
-# INCLUDE(cmake/package.cmake)
+INCLUDE(cmake/package.cmake)
