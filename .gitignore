@@ -34,7 +34,9 @@
 _CPack_Packages
 *.log
 *.tar.gz
+/3rdparty
 /bin
+/libgtest-dev-prefix/
 /local
 /Testing
 cmake_install.cmake
