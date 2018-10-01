@@ -13,6 +13,6 @@ INSTALL(TARGETS stdtracer ARCHIVE DESTINATION lib)
 INSTALL(DIRECTORY include DESTINATION .)
 
 ENABLE_TESTING()
-# INCLUDE(cmake/tests.cmake)
+INCLUDE(cmake/tests.cmake)
 INCLUDE(cmake/examples.cmake)
 INCLUDE(cmake/package.cmake)
