@@ -1,7 +1,6 @@
 #pragma once
 #include <stdtracer.hpp>
 
-// #define TRACE(name) default_tracer_t _((name), default_tracer_ctx)
 #define TRACE(name)                                                            \
     default_tracer_t _((name), default_simple_ctx, default_log_ctx)
 

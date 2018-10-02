@@ -1,5 +1,5 @@
 // TODO: show invoke tree
-#include <stdtracer>
+#include <stdtracer.hpp>
 
 using tracer_t = scope_t_<stack_tracer_ctx_t>;
 
