@@ -12,7 +12,17 @@ TARGET_INCLUDE_DIRECTORIES(stdtracer PRIVATE ${CMAKE_SOURCE_DIR}/include)
 INSTALL(TARGETS stdtracer ARCHIVE DESTINATION lib)
 INSTALL(DIRECTORY include DESTINATION .)
 
+OPTION(BUILD_TESTS "Build tests." ON)
+OPTION(BUILD_EXAMPLES "Build examples." ON)
+
 ENABLE_TESTING()
-INCLUDE(cmake/tests.cmake)
-INCLUDE(cmake/examples.cmake)
+
+IF(BUILD_TESTS)
+    INCLUDE(cmake/tests.cmake)
+ENDIF()
+
+IF(BUILD_EXAMPLES)
+    INCLUDE(cmake/examples.cmake)
+ENDIF()
+
 INCLUDE(cmake/package.cmake)
