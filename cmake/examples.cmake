@@ -1,6 +1,8 @@
-ADD_EXECUTABLE(example-1 examples/example_1.cpp)
-TARGET_INCLUDE_DIRECTORIES(example-1 PRIVATE ${CMAKE_SOURCE_DIR}/include)
-TARGET_LINK_LIBRARIES(example-1 stdtracer)
+FUNCTION(ADD_TRACE_EXAMPLE target)
+    ADD_EXECUTABLE(${target} ${ARGN})
+    TARGET_INCLUDE_DIRECTORIES(${target} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+    TARGET_LINK_LIBRARIES(${target} stdtracer)
+ENDFUNCTION()
 
-ADD_EXECUTABLE(example-2 examples/example_2.cpp)
-TARGET_INCLUDE_DIRECTORIES(example-2 PRIVATE ${CMAKE_SOURCE_DIR}/include)
+ADD_TRACE_EXAMPLE(examples-1 examples/example_1.cpp)
+ADD_TRACE_EXAMPLE(examples-2 examples/example_2.cpp)

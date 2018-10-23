@@ -18,7 +18,10 @@ template <typename clock_t, typename duration_t> class stack_tracer_ctx_t_
     {
     }
 
-    ~stack_tracer_ctx_t_() { report(stdout); }
+    ~stack_tracer_ctx_t_()
+    {
+        if (!call_info_map.empty()) { report(stdout); }
+    }
 
     void in(const std::string &name)
     {
