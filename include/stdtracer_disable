@@ -1,0 +1,11 @@
+#pragma once
+// A drop-in replacement for `<stdtracer>`
+#pragma once
+
+#define TRACE_SCOPE(name)
+
+#define TRACE_STMT(e) e
+
+#define TRACE_EXPR(e) e
+
+#define SET_TRACE_LOG(name)
