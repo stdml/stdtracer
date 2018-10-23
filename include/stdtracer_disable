@@ -1,6 +1,5 @@
 #pragma once
 // A drop-in replacement for `<stdtracer>`
-#pragma once
 
 #define TRACE_SCOPE(name)
 
