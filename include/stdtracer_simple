@@ -1,13 +1,6 @@
 #pragma once
 #include <stdtracer.hpp>
 
-extern simple_tracer_ctx_t default_simple_ctx;
-extern log_tracer_ctx_t default_log_ctx;
-// user should define the following
-// simple_tracer_ctx_t default_simple_ctx("global");
-// log_tracer_ctx_t default_log_ctx("global");
-// or link with -lstdtracer
-
 using tracer_t = multi_tracer_t;
 
 #define TRACE_SCOPE(name)                                                      \

@@ -1,4 +1,6 @@
-#define STD_TRACER_ENABLE_TRACE_STACK 1
+#include <cstdio>
+
+#define STD_TRACER_USE_STACK_TRACER 1
 #include <stdtracer>
 
 int fibo(int n)
