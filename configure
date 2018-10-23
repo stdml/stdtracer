@@ -3,11 +3,21 @@ set -e
 
 PREFIX=$(pwd)/local
 
-CMAKE_FLAGS=-DCMAKE_INSTALL_PREFIX=${PREFIX}
+CMAKE_FLAGS=
+
+add_cmake_flag() {
+    CMAKE_FLAGS="${CMAKE_FLAGS} -D$1=$2"
+}
+
+add_cmake_flag CMAKE_INSTALL_PREFIX ${PREFIX}
+add_cmake_flag CMAKE_BUILD_TYPE Release
+add_cmake_flag CMAKE_EXPORT_COMPILE_COMMANDS 1
+add_cmake_flag CMAKE_VERBOSE_MAKEFILE 1
 
 if [ ! -z ${GTEST_GIT_URL} ]; then
     echo "Using GTEST_GIT_URL=${GTEST_GIT_URL}"
-    CMAKE_FLAGS="${CMAKE_FLAGS} -DGTEST_GIT_URL=${GTEST_GIT_URL}"
+    add_cmake_flag GTEST_GIT_URL ${GTEST_GIT_URL}
+
 fi
 
 echo "Using CMAKE_FLAGS=${CMAKE_FLAGS}"

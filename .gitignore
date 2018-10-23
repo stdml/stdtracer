@@ -42,6 +42,7 @@ _CPack_Packages
 cmake_install.cmake
 CMakeCache.txt
 CMakeFiles
+compile_commands.json
 CPackConfig.cmake
 CPackSourceConfig.cmake
 CTestTestfile.cmake

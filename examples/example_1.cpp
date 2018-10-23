@@ -1,3 +1,5 @@
+#include <cstdio>
+
 #include <stdtracer>
 
 int fibo(int n)

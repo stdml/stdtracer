@@ -6,9 +6,13 @@ SET(GTEST_GIT_URL
     STRING
     "URL for clone gtest")
 
+SET(PREFIX ${CMAKE_SOURCE_DIR}/3rdparty)
+
 EXTERNALPROJECT_ADD(libgtest-dev
                     GIT_REPOSITORY
                     ${GTEST_GIT_URL}
+                    PREFIX
+                    ${PREFIX}
                     CMAKE_ARGS
                     -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}/3rdparty
                     -DCMAKE_CXX_FLAGS=-std=c++11
