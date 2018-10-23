@@ -2,17 +2,17 @@
 
 #include <gtest/gtest.h>
 
-void f() { TRACE(__func__); }
+void f() { TRACE_SCOPE(__func__); }
 
 void g()
 {
-    TRACE(__func__);
+    TRACE_SCOPE(__func__);
     for (int i = 0; i < 10; ++i) { f(); }
 }
 
 TEST(suite, test1)
 {
-    TRACE(__func__);
+    TRACE_SCOPE(__func__);
     g();
 }
 

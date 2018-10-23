@@ -9,20 +9,20 @@ int fibo(int n)
 
 void f(int n)
 {
-    TRACE(__func__);
-    int x = fibo(n);
+    TRACE_SCOPE(__func__);
+    int x = TRACE_EXPR(fibo(n));
     printf("fibo(%d) = %d\n", n, x);
 }
 
 void g()
 {
-    TRACE(__func__);
-    for (int i = 0; i < 43; ++i) { f(i); }
+    TRACE_SCOPE(__func__);
+    for (int i = 0; i < 43; ++i) { TRACE_STMT(f(i)); }
 }
 
 int main()
 {
-    TRACE(__func__);
+    TRACE_SCOPE(__func__);
     g();
     return 0;
 }
