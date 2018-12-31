@@ -21,7 +21,5 @@ FUNCTION(ADD_ADVANCED_TRACE_EXAMPLE target)
     TARGET_INCLUDE_DIRECTORIES(${target} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 ENDFUNCTION()
 
-ADD_ADVANCED_TRACE_EXAMPLE(example-multi
-                           examples/multi/example_multi.cpp
-                           examples/multi/trace.cpp
-                           examples/multi/trace.hpp)
+ADD_ADVANCED_TRACE_EXAMPLE(example-multi examples/multi/example_multi.cpp
+                           examples/multi/trace.cpp)

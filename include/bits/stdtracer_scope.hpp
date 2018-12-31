@@ -1,6 +1,7 @@
 #pragma once
 #include <chrono>
 #include <string>
+#include <tuple>
 
 #include "stdtracer_base.hpp"
 

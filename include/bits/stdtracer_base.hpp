@@ -1,5 +1,6 @@
 #pragma once
 #include <chrono>
+#include <tuple>
 #include <utility>
 
 template <typename T, typename clock_t>
