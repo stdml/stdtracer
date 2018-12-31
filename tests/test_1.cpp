@@ -1,6 +1,4 @@
-#include <stdtracer>
-
-#include <gtest/gtest.h>
+#include "testing.hpp"
 
 void f() { TRACE_SCOPE(__func__); }
 
@@ -14,10 +12,4 @@ TEST(suite, test1)
 {
     TRACE_SCOPE(__func__);
     g();
-}
-
-int main(int argc, char *argv[])
-{
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }

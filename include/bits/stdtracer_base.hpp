@@ -8,31 +8,53 @@ std::chrono::duration<T> since(const std::chrono::time_point<clock_t> &t0)
     return clock_t::now() - t0;
 }
 
-#include <vector>
+template <size_t i> struct seq_in;
 
-template <typename F> int call_in(F &f, const std::string &name)
+template <> struct seq_in<0> {
+    template <typename Tuple>
+    void operator()(const Tuple &t, const std::string &name) const
+    {
+        std::get<std::tuple_size<Tuple>::value - 1>(t).in(name);
+    }
+};
+
+template <size_t i> struct seq_in {
+    template <typename Tuple>
+    void operator()(const Tuple &t, const std::string &name) const
+    {
+        std::get<std::tuple_size<Tuple>::value - 1 - i>(t).in(name);
+        seq_in<i - 1>()(t, name);
+    }
+};
+
+template <typename Tuple> void all_in(const Tuple &t, const std::string &name)
 {
-    f.in(name);
-    return 0;
+    seq_in<std::tuple_size<Tuple>::value - 1>()(t, name);
 }
 
-template <typename F, typename Duration>
-int call_out(F &f, const std::string &name, const Duration &d)
-{
-    f.out(name, d);
-    return 0;
-}
+template <size_t i> struct seq_out;
 
-template <typename Tuple, std::size_t... I>
-void all_in(const Tuple &t, const std::string &name, std::index_sequence<I...>)
-{
-    std::vector<int> ve({call_in(std::get<I>(t), name)...});
-}
+template <> struct seq_out<0> {
+    template <typename Tuple, typename Duration>
+    void operator()(const Tuple &t, const std::string &name,
+                    const Duration &d) const
+    {
+        std::get<0>(t).out(name, d);
+    }
+};
 
-template <typename Tuple, typename Duration, std::size_t... I>
-void all_out(const Tuple &t, const std::string &name, const Duration &d,
-             std::index_sequence<I...>)
+template <size_t i> struct seq_out {
+    template <typename Tuple, typename Duration>
+    void operator()(const Tuple &t, const std::string &name,
+                    const Duration &d) const
+    {
+        std::get<i>(t).out(name, d);
+        seq_out<i - 1>()(t, name, d);
+    }
+};
+
+template <typename Tuple, typename Duration>
+void all_out(const Tuple &t, const std::string &name, const Duration &d)
 {
-    std::vector<int> ve({call_out(
-        std::get<std::tuple_size<Tuple>::value - 1 - I>(t), name, d)...});
+    seq_out<std::tuple_size<Tuple>::value - 1>()(t, name, d);
 }

@@ -1,10 +1,7 @@
 INCLUDE(ExternalProject)
 
-SET(GTEST_GIT_URL
-    https://github.com/google/googletest.git
-    CACHE
-    STRING
-    "URL for clone gtest")
+SET(GTEST_GIT_URL https://github.com/google/googletest.git
+    CACHE STRING "URL for clone gtest")
 
 SET(PREFIX ${CMAKE_SOURCE_DIR}/3rdparty)
 
@@ -19,14 +16,23 @@ EXTERNALPROJECT_ADD(libgtest-dev
                     -Dgtest_disable_pthreads=1
                     -DBUILD_GMOCK=0)
 
-LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/3rdparty/lib)
+LINK_DIRECTORIES(${PREFIX}/lib)
 
-ADD_EXECUTABLE(test-1 tests/test_1.cpp)
-ADD_DEPENDENCIES(test-1 libgtest-dev)
-TARGET_INCLUDE_DIRECTORIES(test-1
-                           PRIVATE
-                           ${CMAKE_SOURCE_DIR}/include
-                           ${CMAKE_SOURCE_DIR}/3rdparty/include)
-TARGET_LINK_LIBRARIES(test-1 stdtracer gtest)
+FUNCTION(ADD_GTEST target)
+    ADD_EXECUTABLE(${target} ${ARGN} tests/main.cpp)
+    ADD_DEPENDENCIES(${target} libgtest-dev)
+    TARGET_INCLUDE_DIRECTORIES(${target} PRIVATE ${PREFIX}/include)
+    TARGET_INCLUDE_DIRECTORIES(${target} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+    TARGET_LINK_LIBRARIES(${target} gtest stdtracer)
+    ADD_TEST(NAME ${target} COMMAND ${target})
+ENDFUNCTION()
 
-ADD_TEST(NAME test-1 COMMAND test-1)
+FILE(GLOB tests tests/test_*.cpp)
+FOREACH(t ${tests})
+    GET_FILENAME_COMPONENT(name ${t} NAME_WE)
+    STRING(REPLACE "_"
+                   "-"
+                   name
+                   ${name})
+    ADD_GTEST(${name} ${t})
+ENDFOREACH()

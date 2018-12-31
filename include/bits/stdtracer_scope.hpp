@@ -33,14 +33,10 @@ template <typename clock_t, typename... ctx_t> class multi_ctx_scope_t_
     multi_ctx_scope_t_(const std::string &name, ctx_t &... ctxs)
         : name(name), t0(clock_t::now()), _ctxs({ctxs...})
     {
-        all_in(_ctxs, name, std::index_sequence_for<ctx_t...>());
+        all_in(_ctxs, name);
     }
 
-    ~multi_ctx_scope_t_()
-    {
-        all_out(_ctxs, name, since<double, clock_t>(t0),
-                std::index_sequence_for<ctx_t...>());
-    }
+    ~multi_ctx_scope_t_() { all_out(_ctxs, name, since<double, clock_t>(t0)); }
 };
 
 template <typename log_ctx_t> class set_trace_log_t
