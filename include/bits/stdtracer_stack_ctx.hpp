@@ -10,7 +10,8 @@
 
 #include "stdtracer_base.hpp"
 
-template <typename clock_t, typename duration_t> class stack_tracer_ctx_t_
+template <typename clock_t, typename duration_t, bool no_report = false>
+class stack_tracer_ctx_t_
 {
   public:
     stack_tracer_ctx_t_(const std::string &name)
@@ -20,6 +21,7 @@ template <typename clock_t, typename duration_t> class stack_tracer_ctx_t_
 
     ~stack_tracer_ctx_t_()
     {
+        if (no_report) { return; }
         if (!call_info_map.empty()) { report(stdout); }
     }
 
@@ -38,6 +40,7 @@ template <typename clock_t, typename duration_t> class stack_tracer_ctx_t_
         call_stack_str.erase(call_stack_str.rfind('/'));
     }
 
+  private:
     void report(FILE *fp)
     {
         const auto total = since<double>(t0);
@@ -69,7 +72,6 @@ template <typename clock_t, typename duration_t> class stack_tracer_ctx_t_
         }
     }
 
-  private:
     const std::string name;
     const std::chrono::time_point<clock_t> t0;
 

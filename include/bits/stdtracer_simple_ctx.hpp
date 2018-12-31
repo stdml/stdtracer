@@ -7,7 +7,8 @@
 
 #include "stdtracer_base.hpp"
 
-template <typename clock_t, typename duration_t> class simple_tracer_ctx_t_
+template <typename clock_t, typename duration_t, bool no_report = false>
+class simple_tracer_ctx_t_
 {
   public:
     explicit simple_tracer_ctx_t_(const std::string &name)
@@ -17,6 +18,7 @@ template <typename clock_t, typename duration_t> class simple_tracer_ctx_t_
 
     ~simple_tracer_ctx_t_()
     {
+        if (no_report) { return; }
         if (!call_info_map.empty()) {
             constexpr const char *filename = "trace.log";
             fprintf(stderr, "// profile info logged to file://%s\n", filename);
