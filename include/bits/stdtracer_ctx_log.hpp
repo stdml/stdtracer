@@ -8,7 +8,7 @@
 
 #include <unistd.h>
 
-#include "stdtracer_base.hpp"
+#include <bits/stdtracer_base.hpp>
 
 struct xterm_t {
     const bool is_tty;

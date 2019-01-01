@@ -8,21 +8,38 @@
 #include <unordered_map>
 #include <vector>
 
-#include "stdtracer_base.hpp"
+#include <bits/stdtracer_base.hpp>
 
 template <typename clock_t, typename duration_t, bool no_report = false>
 class stack_tracer_ctx_t_
 {
+    using instant_t = std::chrono::time_point<clock_t>;
+
+    const std::string name;
+    const instant_t t0;
+    const std::string report_file;
+
   public:
-    stack_tracer_ctx_t_(const std::string &name)
-        : name(name), t0(clock_t::now()), call_stack_str("")
+    stack_tracer_ctx_t_(const std::string &name,
+                        const std::string &report_file = "")
+        : name(name), t0(clock_t::now()), report_file(report_file),
+          call_stack_str("")
     {
     }
 
     ~stack_tracer_ctx_t_()
     {
+        const auto total = since<double, clock_t>(t0);
         if (no_report) { return; }
-        if (!call_info_map.empty()) { report(stdout); }
+        if (call_info_map.empty()) { return; }
+        if (!report_file.empty()) {
+            FILE *fp = fopen(report_file.c_str(), "w");
+            report(fp, total);
+            fclose(fp);
+            fprintf(stderr, "// profile info logged to file://%s\n",
+                    report_file.c_str());
+        }
+        report(stdout, total);
     }
 
     void in(const std::string &name)
@@ -41,9 +58,8 @@ class stack_tracer_ctx_t_
     }
 
   private:
-    void report(FILE *fp)
+    void report(FILE *fp, const duration_t &total) const
     {
-        const auto total = since<double>(t0);
         using item_t = std::tuple<duration_t, uint32_t, std::string>;
         std::vector<item_t> list;
         // for (const auto [name, duration] : total_durations) {
@@ -71,9 +87,6 @@ class stack_tracer_ctx_t_
                     1000 * duration.count() / count, name.c_str());
         }
     }
-
-    const std::string name;
-    const std::chrono::time_point<clock_t> t0;
 
     std::string call_stack_str;
 
@@ -105,12 +118,12 @@ class stack_tracer_ctx_t_
         return lines;
     }
 
-    std::string decode_call_stack_str(const std::string &call_ss)
+    std::string decode_call_stack_str(const std::string &call_ss) const
     {
         std::string ss;
         for (const auto &s : split(call_ss, '/')) {
             const int idx = std::stoi(s);
-            ss += "/" + names[idx];
+            ss += "/" + names.at(idx);
         }
         return ss;
     }

@@ -10,11 +10,11 @@ FUNCTION(ADD_TRACE_DISABLED_EXAMPLE target)
     TARGET_COMPILE_DEFINITIONS(${target} PRIVATE -DSTD_TRACER_DISABLE)
 ENDFUNCTION()
 
-ADD_TRACE_EXAMPLE(examples-1 examples/example_1.cpp)
-ADD_TRACE_EXAMPLE(examples-2 examples/example_2.cpp)
+ADD_TRACE_EXAMPLE(example-1 examples/example_1.cpp)
+ADD_TRACE_EXAMPLE(example-2 examples/example_2.cpp)
 
-ADD_TRACE_DISABLED_EXAMPLE(examples-1-disable examples/example_1.cpp)
-ADD_TRACE_DISABLED_EXAMPLE(examples-2-disable examples/example_2.cpp)
+ADD_TRACE_DISABLED_EXAMPLE(example-1-disable examples/example_1.cpp)
+ADD_TRACE_DISABLED_EXAMPLE(example-2-disable examples/example_2.cpp)
 
 FUNCTION(ADD_ADVANCED_TRACE_EXAMPLE target)
     ADD_EXECUTABLE(${target} ${ARGN})

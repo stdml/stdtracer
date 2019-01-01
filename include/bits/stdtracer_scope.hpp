@@ -3,7 +3,7 @@
 #include <string>
 #include <tuple>
 
-#include "stdtracer_base.hpp"
+#include <bits/stdtracer_base.hpp>
 
 template <typename ctx_t, typename clock_t = std::chrono::high_resolution_clock>
 class scope_t_
