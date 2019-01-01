@@ -74,16 +74,17 @@ class stack_tracer_ctx_t_
         fprintf(fp, "\tinvoke tree of %s::%s (%fs)\n", "stack_tracer_ctx_t_",
                 name.c_str(), total.count());
         fprintf(fp, "%s\n", hr.c_str());
-        fprintf(fp, "%8s    %16s    %12s    %12s    %s\n",  //
-                "count", "cumulative (s)", "%", "mean (ms)", "call chain");
+        fprintf(fp, header_fmt,  //
+                "#", "count", "cumulative (s)", "%", "mean (ms)", "call chain");
         fprintf(fp, "%s\n", hr.c_str());
+        int idx = 0;
         // for (const auto &[duration, count, name] : list) {
         for (const auto &it : list) {
             const auto duration = std::get<0>(it);
             const auto count = std::get<1>(it);
             const auto name = decode_call_stack_str(std::get<2>(it));
-            fprintf(fp, "%8d    %16f    %12.2f    %12.4f    %s\n",  //
-                    count, duration.count(), duration * 100 / total,
+            fprintf(fp, row_fmt,  //
+                    ++idx, count, duration.count(), duration * 100 / total,
                     1000 * duration.count() / count, name.c_str());
         }
     }

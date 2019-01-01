@@ -73,16 +73,17 @@ class thread_tracer_ctx_t_
         fprintf(fp, "\tsummary of %s::%s (%fs)\n", "tracer_ctx_t",  //
                 name.c_str(), total.count());
         fprintf(fp, "%s\n", hr.c_str());
-        fprintf(fp, "%8s    %16s    %12s    %12s    %s\n",  //
-                "count", "cumulative (s)", "%", "mean (ms)", "call site");
+        fprintf(fp, header_fmt,  //
+                "#", "count", "cumulative (s)", "%", "mean (ms)", "call site");
         fprintf(fp, "%s\n", hr.c_str());
         // for (const auto &[duration, count, name] : list) {
+        int idx = 0;
         for (const auto &it : list) {
             const auto duration = std::get<0>(it);
             const auto count = std::get<1>(it);
             const auto name = std::get<2>(it);
-            fprintf(fp, "%8d    %16f    %12.2f    %12.4f    %s\n",  //
-                    count, duration.count(), duration * 100 / total,
+            fprintf(fp, row_fmt,  //
+                    ++idx, count, duration.count(), duration * 100 / total,
                     1000 * duration.count() / count, name.c_str());
         }
     }
