@@ -1,9 +1,10 @@
 #pragma once
 
 // trace contexts
-#include <bits/stdtracer_log_ctx.hpp>
-#include <bits/stdtracer_simple_ctx.hpp>
-#include <bits/stdtracer_stack_ctx.hpp>
+#include <bits/stdtracer_ctx_log.hpp>
+#include <bits/stdtracer_ctx_simple.hpp>
+#include <bits/stdtracer_ctx_stack.hpp>
+#include <bits/stdtracer_ctx_thread.hpp>
 
 // trace scopes
 #include <bits/stdtracer_scope.hpp>
