@@ -7,16 +7,18 @@
 
 #include "stdtracer_base.hpp"
 
-template <typename clock_t, typename duration_t> class simple_tracer_ctx_t_
+template <typename clock_t, typename duration_t, bool no_report = false>
+class simple_tracer_ctx_t_
 {
   public:
     explicit simple_tracer_ctx_t_(const std::string &name)
-        : name(name), t0(clock_t::now()), depth(0)
+        : name(name), t0(clock_t::now())
     {
     }
 
     ~simple_tracer_ctx_t_()
     {
+        if (no_report) { return; }
         if (!call_info_map.empty()) {
             constexpr const char *filename = "trace.log";
             fprintf(stderr, "// profile info logged to file://%s\n", filename);
@@ -27,22 +29,18 @@ template <typename clock_t, typename duration_t> class simple_tracer_ctx_t_
         }
     }
 
-    void in(const std::string &name) { ++depth; }
+    void in(const std::string &name) {}
 
     void out(const std::string &name, const duration_t &d)
     {
         auto &info = call_info_map[name];
         ++info.first;
         info.second += d;
-
-        --depth;
     }
 
   private:
     const std::string name;
     const std::chrono::time_point<clock_t> t0;
-
-    int depth;
 
     using call_info_t = std::pair<uint32_t, duration_t>;
     std::unordered_map<std::string, call_info_t> call_info_map;

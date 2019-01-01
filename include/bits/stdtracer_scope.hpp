@@ -1,6 +1,7 @@
 #pragma once
 #include <chrono>
 #include <string>
+#include <tuple>
 
 #include "stdtracer_base.hpp"
 
@@ -22,38 +23,21 @@ class scope_t_
     ctx_t &ctx;
 };
 
-template <typename clock_t,
-          // typename... ctx_t,
-          typename ctx_t_1, typename ctx_t_2>
-class multi_ctx_scope_t_
+template <typename clock_t, typename... ctx_t> class multi_ctx_scope_t_
 {
-  public:
-    multi_ctx_scope_t_(const std::string &name,
-                       //  ctx_t &... ctxs,
-                       ctx_t_1 &c1, ctx_t_2 &c2)
-        : name(name), t0(clock_t::now()),  // ctxs({ctxs...})
-          c1(c1), c2(c2)
-    {
-        // {ctxs.in(name)...};
-        c1.in(name);
-        c2.in(name);
-    }
-
-    ~multi_ctx_scope_t_()
-    {
-        const auto d = since<double, clock_t>(t0);
-        c2.out(name, d);
-        c1.out(name, d);
-        // ctxs.out(name, d);
-    }
-
-  private:
     const std::string name;
     const std::chrono::time_point<clock_t> t0;
-    // ctx_t &ctx;
-    // std::tuple<ctx_t &...> ctxs;
-    ctx_t_1 &c1;
-    ctx_t_2 &c2;
+
+    std::tuple<ctx_t &...> _ctxs;
+
+  public:
+    multi_ctx_scope_t_(const std::string &name, ctx_t &... ctxs)
+        : name(name), t0(clock_t::now()), _ctxs({ctxs...})
+    {
+        all_in(_ctxs, name);
+    }
+
+    ~multi_ctx_scope_t_() { all_out(_ctxs, name, since<double, clock_t>(t0)); }
 };
 
 template <typename log_ctx_t> class set_trace_log_t
