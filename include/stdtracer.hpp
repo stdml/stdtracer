@@ -4,6 +4,7 @@
 #include <bits/stdtracer_ctx_log.hpp>
 #include <bits/stdtracer_ctx_simple.hpp>
 #include <bits/stdtracer_ctx_stack.hpp>
+#include <bits/stdtracer_ctx_stat.hpp>
 #include <bits/stdtracer_ctx_thread.hpp>
 
 // trace scopes
@@ -20,6 +21,10 @@ using log_tracer_ctx_t = log_tracer_ctx_t_<default_clock_t, default_duration_t>;
 using simple_tracer_ctx_t =
     simple_tracer_ctx_t_<default_clock_t, default_duration_t>;
 
+using stack_tracer_ctx_t =
+    stack_tracer_ctx_t_<default_clock_t, default_duration_t>;
+
+// TODO: deprecate
 using simple_tracer_t = scope_t_<simple_tracer_ctx_t>;
 
 using multi_tracer_t =

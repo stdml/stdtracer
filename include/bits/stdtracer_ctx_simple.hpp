@@ -65,7 +65,7 @@ class simple_tracer_ctx_t_
         std::sort(list.rbegin(), list.rend());
 
         const std::string hr(80, '-');
-        fprintf(fp, "\tsummary of %s::%s (%fs)\n", "tracer_ctx_t",  //
+        fprintf(fp, "\tsummary of %s::%s (%fs)\n", "simple_tracer_ctx",  //
                 name.c_str(), total.count());
         fprintf(fp, "%s\n", hr.c_str());
         fprintf(fp, header_fmt,  //
