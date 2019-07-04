@@ -6,9 +6,8 @@ addons:
     - ubuntu-toolchain-r-test
     packages:
     - g++-7
+    - libgtest-dev
 
 before_install:
-- sudo apt update
-- sudo apt install -y libgtest-dev
 - export CC=gcc-7
 - export CXX=g++-7
