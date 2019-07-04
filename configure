@@ -3,22 +3,38 @@ set -e
 
 PREFIX=$(pwd)/local
 
+parse_args() {
+    for i in "$@"; do
+        case $i in
+        --prefix=*)
+            PREFIX="${i#*=}"
+            ;;
+        *)
+            echo "unknown argument $i"
+            exit 1
+            ;;
+        esac
+    done
+}
+
 CMAKE_FLAGS=
 
 add_cmake_flag() {
-    CMAKE_FLAGS="${CMAKE_FLAGS} -D$1=$2"
+    echo "usinig $1=$2"
+    CMAKE_FLAGS="$CMAKE_FLAGS -D$1=$2"
 }
 
-add_cmake_flag CMAKE_INSTALL_PREFIX ${PREFIX}
-add_cmake_flag CMAKE_BUILD_TYPE Release
-add_cmake_flag CMAKE_EXPORT_COMPILE_COMMANDS 1
-add_cmake_flag CMAKE_VERBOSE_MAKEFILE 1
+add_cmake_flags() {
+    add_cmake_flag CMAKE_INSTALL_PREFIX ${PREFIX}
+    add_cmake_flag CMAKE_BUILD_TYPE Release
+    add_cmake_flag CMAKE_EXPORT_COMPILE_COMMANDS 1
+    add_cmake_flag CMAKE_VERBOSE_MAKEFILE 1
 
-if [ ! -z ${GTEST_GIT_URL} ]; then
-    echo "Using GTEST_GIT_URL=${GTEST_GIT_URL}"
-    add_cmake_flag GTEST_GIT_URL ${GTEST_GIT_URL}
+    if [ ! -z ${GTEST_GIT_URL} ]; then
+        add_cmake_flag GTEST_GIT_URL ${GTEST_GIT_URL}
+    fi
+}
 
-fi
-
-echo "Using CMAKE_FLAGS=${CMAKE_FLAGS}"
+parse_args $@
+add_cmake_flags
 cmake . ${CMAKE_FLAGS}
