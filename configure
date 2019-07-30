@@ -3,11 +3,24 @@ set -e
 
 PREFIX=$(pwd)/local
 
+BUILD_EXAMPLES=0
+BUILD_TESTS=0
+BUILD_BENCHMARKS=0
+
 parse_args() {
     for i in "$@"; do
         case $i in
         --prefix=*)
             PREFIX="${i#*=}"
+            ;;
+        --examples)
+            BUILD_EXAMPLES=1
+            ;;
+        --tests)
+            BUILD_TESTS=1
+            ;;
+        --benchmarks)
+            BUILD_BENCHMARKS=1
             ;;
         *)
             echo "unknown argument $i"
@@ -20,7 +33,7 @@ parse_args() {
 CMAKE_FLAGS=
 
 add_cmake_flag() {
-    echo "usinig $1=$2"
+    echo "Using $1=$2"
     CMAKE_FLAGS="$CMAKE_FLAGS -D$1=$2"
 }
 
@@ -29,6 +42,10 @@ add_cmake_flags() {
     add_cmake_flag CMAKE_BUILD_TYPE Release
     add_cmake_flag CMAKE_EXPORT_COMPILE_COMMANDS 1
     add_cmake_flag CMAKE_VERBOSE_MAKEFILE 1
+
+    add_cmake_flag BUILD_EXAMPLES ${BUILD_BENCHMARKS}
+    add_cmake_flag BUILD_TESTS ${BUILD_TESTS}
+    add_cmake_flag BUILD_BENCHMARKS ${BUILD_BENCHMARKS}
 
     if [ ! -z ${GTEST_GIT_URL} ]; then
         add_cmake_flag GTEST_GIT_URL ${GTEST_GIT_URL}
