@@ -1,10 +1,9 @@
+// -*- mode: c++ -*-
 #pragma once
 #ifdef STD_TRACER_DISABLE
-
-#include <stdtracer_disable>
-
+#    include <stdtracer_disable>
 #else
-#include <stdtracer.hpp>
+#    include <stdtracer.hpp>
 
 /*! This header file is for simple use case.
 
@@ -24,17 +23,18 @@ extern stack_tracer_ctx_t default_stack_tracer_ctx;
 // stack_tracer_ctx_t default_stack_tracer_ctx("global");
 // or link with -lstdtracer
 
-#ifndef STD_TRACER_USE_STACK_TRACER
-#define STD_TRACER_USE_STACK_TRACER 0
-#endif
+#    define DEFINE_TRACE_CONTEXTS                                              \
+        stack_tracer_ctx_t default_stack_tracer_ctx("global");                 \
+        simple_tracer_ctx_t default_simple_ctx("global");                      \
+        log_tracer_ctx_t default_log_ctx("global");
 
-#if STD_TRACER_USE_STACK_TRACER
+#    ifndef STD_TRACER_USE_STACK_TRACER
+#        define STD_TRACER_USE_STACK_TRACER 0
+#    endif
 
-#include <stdtracer_stack>
-
-#else
-
-#include <stdtracer_simple>
-
-#endif
+#    if STD_TRACER_USE_STACK_TRACER
+#        include <stdtracer_stack>
+#    else
+#        include <stdtracer_simple>
+#    endif
 #endif
