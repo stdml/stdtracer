@@ -1,0 +1,24 @@
+// -*- mode: c++ -*-
+#pragma once
+#include <stdtracer.hpp>
+
+extern thread_tracer_ctx_t default_thread_tracer_ctx;
+
+using tracer_t = scope_t_<thread_tracer_ctx_t>;
+
+#define TRACE_SCOPE(name) tracer_t _((name), default_thread_tracer_ctx)
+
+#define TRACE_STMT(e)                                                          \
+    {                                                                          \
+        tracer_t _(#e, default_thread_tracer_ctx);                             \
+        e;                                                                     \
+    }
+
+#define TRACE_EXPR(e)                                                          \
+    [&]() {                                                                    \
+        tracer_t _(#e, default_thread_tracer_ctx);                             \
+        return (e);                                                            \
+    }()
+
+#define DEFINE_TRACE_CONTEXT(name)                                             \
+    thread_tracer_ctx_t default_thread_tracer_ctx(#name)

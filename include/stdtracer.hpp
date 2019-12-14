@@ -20,6 +20,9 @@ using log_tracer_ctx_t = log_tracer_ctx_t_<default_clock_t, default_duration_t>;
 using simple_tracer_ctx_t =
     simple_tracer_ctx_t_<default_clock_t, default_duration_t>;
 
+using thread_tracer_ctx_t =
+    thread_tracer_ctx_t_<default_clock_t, default_duration_t>;
+
 using simple_tracer_t = scope_t_<simple_tracer_ctx_t>;
 
 using multi_tracer_t =
