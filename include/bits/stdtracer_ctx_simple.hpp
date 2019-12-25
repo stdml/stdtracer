@@ -16,6 +16,11 @@ class simple_tracer_ctx_t_
     const instant_t t0;
     const std::string report_file;
 
+    using call_info_t = std::pair<uint32_t, duration_t>;
+    using call_info_map_t = std::unordered_map<std::string, call_info_t>;
+
+    call_info_map_t call_info_map;
+
   public:
     explicit simple_tracer_ctx_t_(const std::string &name,
                                   const std::string &report_file = "")
@@ -47,11 +52,15 @@ class simple_tracer_ctx_t_
         info.second += d;
     }
 
-  private:
-    using call_info_t = std::pair<uint32_t, duration_t>;
-    std::unordered_map<std::string, call_info_t> call_info_map;
-
     void report(FILE *fp, const duration_t &total) const
+    {
+        report(call_info_map, total, name, fp);
+    }
+
+  private:
+    static void report(const call_info_map_t &call_info_map,
+                       const duration_t &total, const std::string &name,
+                       FILE *fp)
     {
         using item_t = std::tuple<duration_t, uint32_t, std::string>;
         std::vector<item_t> list;
@@ -65,7 +74,7 @@ class simple_tracer_ctx_t_
         std::sort(list.rbegin(), list.rend());
 
         const std::string hr(80, '-');
-        fprintf(fp, "\tsummary of %s::%s (%fs)\n", "tracer_ctx_t",  //
+        fprintf(fp, "\tsummary of %s::%s (%fs)\n", "simple_tracer_ctx_t",  //
                 name.c_str(), total.count());
         fprintf(fp, "%s\n", hr.c_str());
         fprintf(fp, header_fmt,  //

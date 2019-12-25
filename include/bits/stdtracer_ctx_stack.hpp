@@ -19,6 +19,16 @@ class stack_tracer_ctx_t_
     const instant_t t0;
     const std::string report_file;
 
+    std::string call_stack_str;
+
+    std::unordered_map<std::string, int> index;
+    std::vector<std::string> names;
+
+    using call_info_t = std::pair<uint32_t, duration_t>;
+    using call_info_map_t = std::unordered_map<std::string, call_info_t>;
+
+    call_info_map_t call_info_map;
+
   public:
     stack_tracer_ctx_t_(const std::string &name,
                         const std::string &report_file = "")
@@ -57,8 +67,16 @@ class stack_tracer_ctx_t_
         call_stack_str.erase(call_stack_str.rfind('/'));
     }
 
-  private:
     void report(FILE *fp, const duration_t &total) const
+    {
+        report(call_info_map, names, total, name, fp);
+    }
+
+  private:
+    static void report(const call_info_map_t &call_info_map,
+                       const std::vector<std::string> &names,
+                       const duration_t &total, const std::string &name,
+                       FILE *fp)
     {
         using item_t = std::tuple<duration_t, uint32_t, std::string>;
         std::vector<item_t> list;
@@ -71,7 +89,7 @@ class stack_tracer_ctx_t_
         std::sort(list.rbegin(), list.rend());
 
         const std::string hr(80, '-');
-        fprintf(fp, "\tinvoke tree of %s::%s (%fs)\n", "stack_tracer_ctx_t_",
+        fprintf(fp, "\tinvoke tree of %s::%s (%fs)\n", "stack_tracer_ctx_t",
                 name.c_str(), total.count());
         fprintf(fp, "%s\n", hr.c_str());
         fprintf(fp, header_fmt,  //
@@ -82,20 +100,12 @@ class stack_tracer_ctx_t_
         for (const auto &it : list) {
             const auto duration = std::get<0>(it);
             const auto count = std::get<1>(it);
-            const auto name = decode_call_stack_str(std::get<2>(it));
+            const auto name = decode_call_stack_str(std::get<2>(it), names);
             fprintf(fp, row_fmt,  //
                     ++idx, count, duration.count(), duration * 100 / total,
                     1000 * duration.count() / count, name.c_str());
         }
     }
-
-    std::string call_stack_str;
-
-    std::unordered_map<std::string, int> index;
-    std::vector<std::string> names;
-
-    using call_info_t = std::pair<uint32_t, duration_t>;
-    std::unordered_map<std::string, call_info_t> call_info_map;
 
     int get_idx(const std::string &name)
     {
@@ -119,7 +129,9 @@ class stack_tracer_ctx_t_
         return lines;
     }
 
-    std::string decode_call_stack_str(const std::string &call_ss) const
+    static std::string
+    decode_call_stack_str(const std::string &call_ss,
+                          const std::vector<std::string> &names)
     {
         std::string ss;
         for (const auto &s : split(call_ss, '/')) {

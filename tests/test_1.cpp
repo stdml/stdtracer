@@ -1,5 +1,7 @@
 #include "testing.hpp"
 
+#include <stdtracer>
+
 void f() { TRACE_SCOPE(__func__); }
 
 void g()

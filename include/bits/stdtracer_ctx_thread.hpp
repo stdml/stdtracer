@@ -18,7 +18,9 @@ class thread_tracer_ctx_t_
     const std::string report_file;
 
     using call_info_t = std::pair<uint32_t, duration_t>;
-    std::unordered_map<std::string, call_info_t> call_info_map;
+    using call_info_map_t = std::unordered_map<std::string, call_info_t>;
+
+    call_info_map_t call_info_map;
 
     std::mutex mu;
 
@@ -35,11 +37,11 @@ class thread_tracer_ctx_t_
         if (no_report) { return; }
         if (call_info_map.empty()) { return; }
         if (!report_file.empty()) {
-            FILE *fp = fopen(report_file.c_str(), "w");
+            FILE *fp = std::fopen(report_file.c_str(), "w");
             report(fp, total);
-            fclose(fp);
-            fprintf(stderr, "// profile info logged to file://%s\n",
-                    report_file.c_str());
+            std::fclose(fp);
+            std::fprintf(stderr, "// profile info logged to file://%s\n",
+                         report_file.c_str());
         }
         report(stdout, total);
     }
@@ -55,8 +57,15 @@ class thread_tracer_ctx_t_
         info.second += d;
     }
 
-  private:
     void report(FILE *fp, const duration_t &total) const
+    {
+        report(call_info_map, total, name, fp);
+    }
+
+  private:
+    static void report(const call_info_map_t &call_info_map,
+                       const duration_t &total, const std::string &name,
+                       FILE *fp)
     {
         using item_t = std::tuple<duration_t, uint32_t, std::string>;
         std::vector<item_t> list;
@@ -70,21 +79,21 @@ class thread_tracer_ctx_t_
         std::sort(list.rbegin(), list.rend());
 
         const std::string hr(80, '-');
-        fprintf(fp, "\tsummary of %s::%s (%fs)\n", "tracer_ctx_t",  //
-                name.c_str(), total.count());
-        fprintf(fp, "%s\n", hr.c_str());
-        fprintf(fp, header_fmt,  //
-                "#", "count", "cumulative (s)", "%", "mean (ms)", "call site");
-        fprintf(fp, "%s\n", hr.c_str());
-        // for (const auto &[duration, count, name] : list) {
+        std::fprintf(fp, "\tsummary of %s::%s (%fs)\n", "thread_tracer_ctx",  //
+                     name.c_str(), total.count());
+        std::fprintf(fp, "%s\n", hr.c_str());
+        std::fprintf(fp, header_fmt,  //
+                     "#", "count", "cumulative (s)", "%", "mean (ms)",
+                     "call site");
+        std::fprintf(fp, "%s\n", hr.c_str());
         int idx = 0;
         for (const auto &it : list) {
             const auto duration = std::get<0>(it);
             const auto count = std::get<1>(it);
             const auto name = std::get<2>(it);
-            fprintf(fp, row_fmt,  //
-                    ++idx, count, duration.count(), duration * 100 / total,
-                    1000 * duration.count() / count, name.c_str());
+            std::fprintf(fp, row_fmt,  //
+                         ++idx, count, duration.count(), duration * 100 / total,
+                         1000 * duration.count() / count, name.c_str());
         }
     }
 };
