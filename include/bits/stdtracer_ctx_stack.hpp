@@ -18,6 +18,7 @@ class stack_tracer_ctx_t_
     const std::string name;
     const instant_t t0;
     const std::string report_file;
+    const bool report_stdout_;
 
     std::string call_stack_str;
 
@@ -33,7 +34,7 @@ class stack_tracer_ctx_t_
     stack_tracer_ctx_t_(const std::string &name,
                         const std::string &report_file = "")
         : name(name), t0(clock_t::now()), report_file(report_file),
-          call_stack_str("")
+          report_stdout_(report_stdout()), call_stack_str("")
     {
     }
 
@@ -49,7 +50,7 @@ class stack_tracer_ctx_t_
             fprintf(stderr, "// profile info logged to file://%s\n",
                     report_file.c_str());
         }
-        report(stdout, total);
+        if (report_stdout_) { report(stdout, total); }
     }
 
     void in(const std::string &name)

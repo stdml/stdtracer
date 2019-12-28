@@ -1,7 +1,10 @@
 #pragma once
 #include <chrono>
+#include <cstdlib>
 #include <tuple>
 #include <utility>
+
+constexpr const char *STD_TRACER_REPORT_STDOUT = "STD_TRACER_REPORT_STDOUT";
 
 constexpr const char *header_fmt = "%5s  %8s    %16s    %12s    %12s    %s\n";
 constexpr const char *row_fmt = "%5d  %8d    %16f    %12.2f    %12.4f    %s\n";
@@ -61,4 +64,13 @@ template <typename Tuple, typename Duration>
 void all_out(const Tuple &t, const std::string &name, const Duration &d)
 {
     seq_out<std::tuple_size<Tuple>::value - 1>()(t, name, d);
+}
+
+inline bool report_stdout()
+{
+    const char *ptr = std::getenv(STD_TRACER_REPORT_STDOUT);
+    if (ptr) {
+        if (std::strcmp(ptr, "0") == 0) { return false; }
+    }
+    return true;
 }

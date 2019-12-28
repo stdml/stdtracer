@@ -15,6 +15,7 @@ class simple_tracer_ctx_t_
     const std::string name;
     const instant_t t0;
     const std::string report_file;
+    const bool report_stdout_;
 
     using call_info_t = std::pair<uint32_t, duration_t>;
     using call_info_map_t = std::unordered_map<std::string, call_info_t>;
@@ -24,7 +25,8 @@ class simple_tracer_ctx_t_
   public:
     explicit simple_tracer_ctx_t_(const std::string &name,
                                   const std::string &report_file = "")
-        : name(name), t0(clock_t::now()), report_file(report_file)
+        : name(name), t0(clock_t::now()), report_file(report_file),
+          report_stdout_(report_stdout())
     {
     }
 
@@ -40,7 +42,7 @@ class simple_tracer_ctx_t_
             fprintf(stderr, "// profile info logged to file://%s\n",
                     report_file.c_str());
         }
-        report(stdout, total);
+        if (report_stdout_) { report(stdout, total); }
     }
 
     void in(const std::string &name) {}
