@@ -23,7 +23,8 @@ class scope_t_
     ctx_t &ctx;
 };
 
-template <typename clock_t, typename... ctx_t> class multi_ctx_scope_t_
+template <typename clock_t, typename... ctx_t>
+class multi_ctx_scope_t_
 {
     const std::string name;
     const std::chrono::time_point<clock_t> t0;
@@ -40,7 +41,8 @@ template <typename clock_t, typename... ctx_t> class multi_ctx_scope_t_
     ~multi_ctx_scope_t_() { all_out(_ctxs, name, since<double, clock_t>(t0)); }
 };
 
-template <typename log_ctx_t> class set_trace_log_t
+template <typename log_ctx_t>
+class set_trace_log_t
 {
   public:
     set_trace_log_t(const std::string &name, log_ctx_t &ctx, bool reuse = false)

@@ -29,7 +29,8 @@ struct xterm_t {
         e;                                                                     \
     }
 
-template <typename clock_t, typename duration_t> class log_tracer_ctx_t_
+template <typename clock_t, typename duration_t>
+class log_tracer_ctx_t_
 {
   public:
     explicit log_tracer_ctx_t_(const std::string &name)
@@ -71,14 +72,16 @@ template <typename clock_t, typename duration_t> class log_tracer_ctx_t_
         for (int i = 0; i < depth; ++i) { fprintf(fp, "    "); }
     }
 
-    template <typename... Args> void logf1(FILE *fp, const Args &... args)
+    template <typename... Args>
+    void logf1(FILE *fp, const Args &... args)
     {
         fprintf(fp, "// ");
         fprintf(fp, args...);
         fputc('\n', fp);
     }
 
-    template <typename... Args> void logf(const Args &... args)
+    template <typename... Args>
+    void logf(const Args &... args)
     {
         for (auto fp : log_files) {
             if (fp == stdout) { indent(fp); }
