@@ -1,7 +1,7 @@
 #pragma once
 #include <stdtracer.hpp>
 
-using tracer_t = multi_tracer_t;
+using tracer_t = simple_log_tracer_t;
 
 extern simple_tracer_ctx_t default_simple_ctx;
 extern log_tracer_ctx_t default_log_ctx;

@@ -2,20 +2,19 @@
 #pragma once
 #include <stdtracer.hpp>
 
-using tracer_t = multi_tracer_t;
+using tracer_t = simple_tracer_t;
 
-#define TRACE_SCOPE(name)                                                      \
-    tracer_t _((name), default_simple_ctx, default_log_ctx)
+#define TRACE_SCOPE(name) tracer_t _((name), default_simple_ctx)
 
 #define TRACE_STMT(e)                                                          \
     {                                                                          \
-        tracer_t _(#e, default_simple_ctx, default_log_ctx);                   \
+        tracer_t _(#e, default_simple_ctx);                                    \
         e;                                                                     \
     }
 
 #define TRACE_EXPR(e)                                                          \
     [&]() {                                                                    \
-        tracer_t _(#e, default_simple_ctx, default_log_ctx);                   \
+        tracer_t _(#e, default_simple_ctx);                                    \
         return (e);                                                            \
     }()
 
@@ -26,7 +25,7 @@ template <bool enable = false, typename F, typename... Arg>
 void trace_call(const std::string &name, F &f, Arg &... args)
 {
     if (enable) {
-        tracer_t _(name, default_simple_ctx, default_log_ctx);
+        tracer_t _(name, default_simple_ctx);
         f(args...);
     } else {
         f(args...);
