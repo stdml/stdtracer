@@ -6,28 +6,8 @@
 #include <stack>
 #include <string>
 
-#include <unistd.h>
-
 #include <bits/stdtracer_base.hpp>
-
-struct xterm_t {
-    const bool is_tty;
-    xterm_t(uint8_t b, uint8_t f) : is_tty(isatty(fileno(stdout)))
-    {
-        if (is_tty) { printf("\e[%u;%um", b, f); }
-    }
-
-    ~xterm_t()
-    {
-        if (is_tty) { printf("\e[m"); }
-    }
-};
-
-#define WITH_XTERM(b, f, e)                                                    \
-    {                                                                          \
-        xterm_t _(b, f);                                                       \
-        e;                                                                     \
-    }
+#include <bits/stdtracer_xterm.hpp>
 
 template <typename clock_t, typename duration_t>
 class log_tracer_ctx_t_
