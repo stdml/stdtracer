@@ -1,6 +1,7 @@
 #pragma once
 #include <chrono>
 #include <cstdlib>
+#include <cstring>
 #include <tuple>
 #include <utility>
 
