@@ -1,0 +1,6 @@
+// -*- mode: c++ -*-
+// Usage: examples/example_simple.cpp
+#pragma once
+#include <tracer/bits/simple.hpp>
+
+#define DEFINE_TRACE_CONTEXTS simple_tracer_ctx_t default_simple_ctx("global");

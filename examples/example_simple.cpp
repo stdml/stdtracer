@@ -1,6 +1,8 @@
 #include <cstdio>
 
-#include <stdtracer>
+#include <tracer/simple>
+
+DEFINE_TRACE_CONTEXTS;
 
 int fibo(int n)
 {
