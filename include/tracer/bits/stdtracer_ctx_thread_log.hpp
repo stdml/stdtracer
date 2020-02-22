@@ -7,8 +7,8 @@
 #include <stack>
 #include <string>
 
-#include <bits/stdtracer_base.hpp>
-#include <bits/stdtracer_xterm.hpp>
+#include <tracer/bits/stdtracer_base.hpp>
+#include <tracer/bits/stdtracer_xterm.hpp>
 
 template <typename clock_t, typename duration_t>
 class thread_log_tracer_ctx_t_

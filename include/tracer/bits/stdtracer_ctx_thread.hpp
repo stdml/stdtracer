@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include <bits/stdtracer_base.hpp>
+#include <tracer/bits/stdtracer_base.hpp>
 
 template <typename clock_t, typename duration_t, bool no_report = false>
 class thread_tracer_ctx_t_

@@ -1,7 +1,7 @@
 #include <vector>
 
 #include "testing.hpp"
-#include <bits/stdtracer_scope.hpp>
+#include <tracer/bits/stdtracer_scope.hpp>
 
 using default_duration_t = std::chrono::duration<double>;
 

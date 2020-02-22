@@ -1,6 +1,6 @@
 #pragma once
-#include <bits/stdtracer_ctx_thread.hpp>
-#include <bits/stdtracer_scope.hpp>
+#include <tracer/bits/stdtracer_ctx_thread.hpp>
+#include <tracer/bits/stdtracer_scope.hpp>
 
 // BEGIN defaults
 using default_clock_t = std::chrono::high_resolution_clock;
