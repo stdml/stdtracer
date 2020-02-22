@@ -1,6 +1,12 @@
 #include "benchmark.hpp"
+#include <tracer/bits/config.hpp>
+#include <tracer/bits/stdtracer_ctx_simple.hpp>
+#include <tracer/bits/stdtracer_ctx_stack.hpp>
+#include <tracer/bits/stdtracer_ctx_thread.hpp>
+#include <tracer/bits/stdtracer_scope.hpp>
 
-template <int k> struct bench_simple {
+template <int k>
+struct bench_simple {
     void operator()(benchmark::State &state) const
     {
         using ctx_t =
@@ -29,7 +35,8 @@ static void bench_simple_100(benchmark::State &state)
 }
 BENCHMARK(bench_simple_100);
 
-template <int k> struct bench_stack {
+template <int k>
+struct bench_stack {
     void operator()(benchmark::State &state) const
     {
         using ctx_t =
@@ -58,7 +65,8 @@ static void bench_stack_100(benchmark::State &state)
 }
 BENCHMARK(bench_stack_100);
 
-template <int k> struct bench_multi {
+template <int k>
+struct bench_multi {
     void operator()(benchmark::State &state) const
     {
         using ctx_t_1 =
@@ -91,7 +99,8 @@ static void bench_multi_100(benchmark::State &state)
 }
 BENCHMARK(bench_multi_100);
 
-template <int k> struct bench_thread {
+template <int k>
+struct bench_thread {
     void operator()(benchmark::State &state) const
     {
         using ctx_t =
