@@ -1,13 +1,11 @@
 #pragma once
+#include <tracer/bits/config.hpp>
 #include <tracer/bits/stdtracer_ctx_log.hpp>
 #include <tracer/bits/stdtracer_ctx_simple.hpp>
 #include <tracer/bits/stdtracer_macros.hpp>
 #include <tracer/bits/stdtracer_scope.hpp>
 
 // BEGIN defaults
-using default_clock_t = std::chrono::high_resolution_clock;
-using default_duration_t = std::chrono::duration<double>;
-
 using log_tracer_ctx_t = log_tracer_ctx_t_<default_clock_t, default_duration_t>;
 
 using simple_tracer_ctx_t =
