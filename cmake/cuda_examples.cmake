@@ -1,0 +1,8 @@
+ENABLE_LANGUAGE(CUDA)
+
+FUNCTION(ADD_CUDA_EXAMPLE target)
+    ADD_EXECUTABLE(${target} ${ARGN})
+    TARGET_INCLUDE_DIRECTORIES(${target} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+ENDFUNCTION()
+
+ADD_CUDA_EXAMPLE(example-cuda examples/example_cuda.cu)

@@ -7,9 +7,10 @@ SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 INSTALL(DIRECTORY include DESTINATION .)
 
-OPTION(BUILD_TESTS "Build tests." OFF)
 OPTION(BUILD_BENCHMARKS "Build benchmarks." OFF)
+OPTION(BUILD_CUDA_EXAMPLES "Build cuda examples." OFF)
 OPTION(BUILD_EXAMPLES "Build examples." OFF)
+OPTION(BUILD_TESTS "Build tests." OFF)
 
 IF(BUILD_TESTS)
     ENABLE_TESTING()
@@ -22,6 +23,9 @@ ENDIF()
 
 IF(BUILD_EXAMPLES)
     INCLUDE(cmake/examples.cmake)
+ENDIF()
+IF(BUILD_CUDA_EXAMPLES)
+    INCLUDE(cmake/cuda_examples.cmake)
 ENDIF()
 
 INCLUDE(cmake/package.cmake)
