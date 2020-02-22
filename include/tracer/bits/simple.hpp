@@ -1,5 +1,6 @@
 #pragma once
 #include <tracer/bits/stdtracer_ctx_simple.hpp>
+#include <tracer/bits/stdtracer_macros.hpp>
 #include <tracer/bits/stdtracer_scope.hpp>
 
 // BEGIN defaults
@@ -16,16 +17,8 @@ using tracer_t = simple_tracer_t;
 
 extern simple_tracer_ctx_t default_simple_ctx;
 
-#define TRACE_SCOPE(name) tracer_t _((name), default_simple_ctx)
+#define TRACE_SCOPE(name) _TRACE_SCOPE(name, tracer_t, default_simple_ctx)
 
-#define TRACE_STMT(e)                                                          \
-    {                                                                          \
-        tracer_t _(#e, default_simple_ctx);                                    \
-        e;                                                                     \
-    }
+#define TRACE_STMT(e) _TRACE_STMT(e, tracer_t, default_simple_ctx)
 
-#define TRACE_EXPR(e)                                                          \
-    [&]() {                                                                    \
-        tracer_t _(#e, default_simple_ctx);                                    \
-        return (e);                                                            \
-    }()
+#define TRACE_EXPR(e) _TRACE_EXPR(e, tracer_t, default_simple_ctx)
