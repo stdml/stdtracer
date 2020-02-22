@@ -1,6 +1,8 @@
 #include "testing.hpp"
 
-#include <stdtracer>
+#include <tracer/simple>
+
+DEFINE_TRACE_CONTEXTS;
 
 void f() { TRACE_SCOPE(__func__); }
 

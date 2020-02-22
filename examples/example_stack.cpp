@@ -1,11 +1,12 @@
 #include <cstdio>
 
-#define STD_TRACER_USE_STACK_TRACER 1
-#include <stdtracer>
+#include <tracer/stack>
+
+DEFINE_TRACE_CONTEXTS;  // must be defined exactly once in one executable
 
 int fibo(int n)
 {
-    // don't use in recursive function!
+    // don't use in deep recursive function!
     if (n < 2) { return 1; }
     return fibo(n - 1) + fibo(n - 2);
 }

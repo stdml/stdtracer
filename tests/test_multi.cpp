@@ -1,8 +1,12 @@
 #include <vector>
 
 #include "testing.hpp"
+#include <bits/stdtracer_scope.hpp>
 
-template <int i, typename duration_t = default_duration_t> class fake_context
+using default_duration_t = std::chrono::duration<double>;
+
+template <int i, typename duration_t = default_duration_t>
+class fake_context
 {
     std::vector<int> &_events;
 

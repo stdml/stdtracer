@@ -3,7 +3,6 @@ FIND_PACKAGE(Threads)
 FUNCTION(ADD_TRACE_EXAMPLE target)
     ADD_EXECUTABLE(${target} ${ARGN})
     TARGET_INCLUDE_DIRECTORIES(${target} PRIVATE ${CMAKE_SOURCE_DIR}/include)
-    TARGET_LINK_LIBRARIES(${target} stdtracer)
     TARGET_LINK_LIBRARIES(${target} Threads::Threads)
 ENDFUNCTION()
 
