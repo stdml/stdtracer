@@ -5,12 +5,10 @@
 #include <tracer/bits/stdtracer_macros.hpp>
 #include <tracer/bits/stdtracer_scope.hpp>
 
-// BEGIN defaults
 using log_tracer_ctx_t = log_tracer_ctx_t_<default_clock_t, default_duration_t>;
 
 using simple_tracer_ctx_t =
     simple_tracer_ctx_t_<default_clock_t, default_duration_t>;
-// END defaults
 
 using simple_log_tracer_t =
     multi_ctx_scope_t_<default_clock_t, simple_tracer_ctx_t, log_tracer_ctx_t>;

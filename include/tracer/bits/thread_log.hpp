@@ -4,10 +4,8 @@
 #include <tracer/bits/stdtracer_macros.hpp>
 #include <tracer/bits/stdtracer_scope.hpp>
 
-// BEGIN defaults
 using thread_log_tracer_ctx_t =
     thread_log_tracer_ctx_t_<default_clock_t, default_duration_t>;
-// END defaults
 
 using tracer_t = scope_t_<thread_log_tracer_ctx_t>;
 
