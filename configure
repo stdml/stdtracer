@@ -1,9 +1,11 @@
 #!/bin/bash
 set -e
 
-PREFIX=$(pwd)/local
+PREFIX=$PWD/local
+CUDA_HOME=/usr/local/cuda
 
 BUILD_EXAMPLES=0
+BUILD_CUDA_EXAMPLES=0
 BUILD_TESTS=0
 BUILD_BENCHMARKS=0
 VERBOSE=0
@@ -16,6 +18,9 @@ parse_args() {
             ;;
         --examples)
             BUILD_EXAMPLES=1
+            ;;
+        --cuda-examples)
+            BUILD_CUDA_EXAMPLES=1
             ;;
         --tests)
             BUILD_TESTS=1
@@ -47,10 +52,15 @@ add_cmake_flags() {
     add_cmake_flag CMAKE_EXPORT_COMPILE_COMMANDS ${VERBOSE}
     add_cmake_flag CMAKE_VERBOSE_MAKEFILE ${VERBOSE}
 
+    add_cmake_flag BUILD_BENCHMARKS ${BUILD_BENCHMARKS}
+    add_cmake_flag BUILD_CUDA_EXAMPLES ${BUILD_CUDA_EXAMPLES}
     add_cmake_flag BUILD_EXAMPLES ${BUILD_EXAMPLES}
     add_cmake_flag BUILD_TESTS ${BUILD_TESTS}
-    add_cmake_flag BUILD_BENCHMARKS ${BUILD_BENCHMARKS}
 
+    if [ ${BUILD_CUDA_EXAMPLES} -eq 1 ]; then
+        add_cmake_flag CMAKE_CUDA_COMPILER $CUDA_HOME/bin/nvcc
+        add_cmake_flag CUDA_TOOLKIT_ROOT_DIR $CUDA_HOME
+    fi
     if [ ! -z ${GTEST_GIT_URL} ]; then
         add_cmake_flag GTEST_GIT_URL ${GTEST_GIT_URL}
     fi

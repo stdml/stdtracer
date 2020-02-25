@@ -1,0 +1,6 @@
+// -*- mode: c++ -*-
+// Usage: examples/example_stack.cpp
+#pragma once
+#include <tracer/bits/stack.hpp>
+
+#define DEFINE_TRACE_CONTEXTS stack_tracer_ctx_t default_stack_ctx("global");

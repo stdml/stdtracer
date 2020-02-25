@@ -1,6 +1,4 @@
-#include <cstdio>
-
-#include <tracer/stack>
+#include <tracer/simple_log>
 
 DEFINE_TRACE_CONTEXTS;  // must be defined exactly once in one executable
 
@@ -11,36 +9,22 @@ int fibo(int n)
     return fibo(n - 1) + fibo(n - 2);
 }
 
-void work(int n)
+void f(int n)
 {
     TRACE_SCOPE(__func__);
     int x = TRACE_EXPR(fibo(n));
     printf("fibo(%d) = %d\n", n, x);
 }
 
-void f()
-{
-    TRACE_SCOPE(__func__);
-    for (int i = 0; i < 20; ++i) { TRACE_STMT(work(i)); }
-}
-
 void g()
 {
     TRACE_SCOPE(__func__);
-    for (int i = 20; i < 30; ++i) { TRACE_STMT(work(i)); }
-}
-
-void h()
-{
-    TRACE_SCOPE(__func__);
-    for (int i = 30; i < 43; ++i) { TRACE_STMT(work(i)); }
+    for (int i = 0; i < 43; ++i) { TRACE_STMT(f(i)); }
 }
 
 int main()
 {
     TRACE_SCOPE(__func__);
-    f();
     g();
-    h();
     return 0;
 }

@@ -1,7 +1,7 @@
 #include <thread>
 #include <vector>
 
-#include <tracer/thread>
+#include <tracer/thread_log>
 
 DEFINE_TRACE_CONTEXTS;  // must be defined exactly once in one executable
 
@@ -12,7 +12,13 @@ int fibo(int n)
     return fibo(n - 1) + fibo(n - 2);
 }
 
-void f(int n, int &result) { result = TRACE_EXPR(fibo(n)); }
+void f(int n, int &result)
+{
+    char name[64];
+    sprintf(name, "%s(%d)", __func__, n);
+    TRACE_SCOPE(name);
+    result = fibo(n);
+}
 
 void g()
 {

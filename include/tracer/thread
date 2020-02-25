@@ -1,0 +1,7 @@
+// -*- mode: c++ -*-
+// Usage: examples/example_thread.cpp
+#pragma once
+#include <tracer/bits/simple_thread.hpp>
+
+#define DEFINE_TRACE_CONTEXTS                                                  \
+    thread_tracer_ctx_t default_thread_tracer_ctx("global");
