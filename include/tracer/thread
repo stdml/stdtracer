@@ -1,5 +1,5 @@
 // -*- mode: c++ -*-
-// Usage: examples/example_simple_thread.cpp
+// Usage: examples/example_thread.cpp
 #pragma once
 #include <tracer/bits/simple_thread.hpp>
 

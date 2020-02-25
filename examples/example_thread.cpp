@@ -1,7 +1,7 @@
 #include <thread>
 #include <vector>
 
-#include <tracer/simple_thread>
+#include <tracer/thread>
 
 DEFINE_TRACE_CONTEXTS;  // must be defined exactly once in one executable
 
