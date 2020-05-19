@@ -12,6 +12,10 @@ OPTION(BUILD_CUDA_EXAMPLES "Build cuda examples." OFF)
 OPTION(BUILD_EXAMPLES "Build examples." OFF)
 OPTION(BUILD_TESTS "Build tests." OFF)
 
+IF(UNIX)
+    ADD_DEFINITIONS(-DHAVE_UNISTD)
+ENDIF()
+
 IF(BUILD_TESTS)
     ENABLE_TESTING()
     INCLUDE(cmake/tests.cmake)
