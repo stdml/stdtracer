@@ -8,6 +8,12 @@
 template <typename ctx_t, typename clock_t = std::chrono::high_resolution_clock>
 class scope_t_
 {
+    using instant_t = std::chrono::time_point<clock_t>;
+
+    const std::string name;
+    const instant_t t0;
+    ctx_t &ctx;
+
   public:
     scope_t_(const std::string &name, ctx_t &ctx)
         : name(name), t0(clock_t::now()), ctx(ctx)
@@ -16,18 +22,15 @@ class scope_t_
     }
 
     ~scope_t_() { ctx.out(name, since<double, clock_t>(t0)); }
-
-  private:
-    const std::string name;
-    const std::chrono::time_point<clock_t> t0;
-    ctx_t &ctx;
 };
 
 template <typename clock_t, typename... ctx_t>
 class multi_ctx_scope_t_
 {
+    using instant_t = std::chrono::time_point<clock_t>;
+
     const std::string name;
-    const std::chrono::time_point<clock_t> t0;
+    const instant_t t0;
 
     std::tuple<ctx_t &...> _ctxs;
 
@@ -44,6 +47,9 @@ class multi_ctx_scope_t_
 template <typename log_ctx_t>
 class set_trace_log_t
 {
+    const std::string name;
+    log_ctx_t &ctx;
+
   public:
     set_trace_log_t(const std::string &name, log_ctx_t &ctx, bool reuse = false)
         : name(name), ctx(ctx)
@@ -64,8 +70,22 @@ class set_trace_log_t
         ctx.log_files.pop_front();
         std::fclose(fp);
     }
+};
 
-  private:
+template <typename ctx_t, typename clock_t = std::chrono::high_resolution_clock>
+class timeline_scope_t_
+{
+    using instant_t = std::chrono::time_point<clock_t>;
+
     const std::string name;
-    log_ctx_t &ctx;
+    const instant_t t0;
+    ctx_t &ctx;
+
+  public:
+    timeline_scope_t_(const std::string name, ctx_t &ctx)
+        : name(std::move(name)), t0(clock_t::now()), ctx(ctx)
+    {
+    }
+
+    ~timeline_scope_t_() { ctx.out(std::move(name), t0, clock_t::now()); }
 };

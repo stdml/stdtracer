@@ -1,0 +1,7 @@
+// -*- mode: c++ -*-
+// Usage: examples/example_timeline.cpp
+#pragma once
+#include <tracer/bits/timeline.hpp>
+
+#define DEFINE_TRACE_CONTEXTS                                                  \
+    timeline_tracer_ctx_t default_timeline_tracer_ctx("global");
