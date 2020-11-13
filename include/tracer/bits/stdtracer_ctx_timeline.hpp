@@ -1,6 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <cstdio>
+#include <mutex>
 #include <string>
 #include <vector>
 
@@ -25,6 +26,7 @@ class timeline_tracer_ctx_t_
     const bool report_stdout_;
 
     timeline timeline_;
+    std::mutex mu_;
 
   public:
     explicit timeline_tracer_ctx_t_(const std::string name,
@@ -42,6 +44,7 @@ class timeline_tracer_ctx_t_
 
     void out(const std::string name, const instant_t t0, const instant_t t1)
     {
+        std::lock_guard<std::mutex> _lk(mu_);
         timeline_.emplace_back(event{t0, t1, std::move(name)});
     }
 
