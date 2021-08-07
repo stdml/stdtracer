@@ -19,7 +19,7 @@ class xterm_t
 
     const char *operator()(const char *s) const
     {
-        static char line[1 << 8];
+        static thread_local char line[1 << 8];
         std::sprintf(line, "\e[%u;%um%s\e[m", b, f, s);
         return line;
     }
