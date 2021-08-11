@@ -1,0 +1,4 @@
+// -*- mode: c++ -*-
+#pragma once
+#include <tracer/bits/site.hpp>
+
