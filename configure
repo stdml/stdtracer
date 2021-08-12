@@ -71,6 +71,8 @@ build='.build'
 gen_make() {
     echo "build:"
     echo "\t\$(MAKE) -C $build"
+    echo "install: build"
+    echo "\t\$(MAKE) -C $build install"
     echo "%:"
     echo "\t\$(MAKE) -C $build \$@"
 }
@@ -81,5 +83,4 @@ add_cmake_flags
 mkdir -p $build
 cd $build
 cmake $W ${CMAKE_FLAGS}
-echo "\tgenerate Makefile"
 gen_make >$W/Makefile
