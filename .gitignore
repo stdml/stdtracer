@@ -48,3 +48,5 @@ CPackSourceConfig.cmake
 CTestTestfile.cmake
 install_manifest.txt
 Makefile
+
+/.build

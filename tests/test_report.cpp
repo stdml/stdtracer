@@ -53,17 +53,17 @@ void test_report(const char *filename, const char *expected)
 TEST(suite, simple_tracer_ctx_t_report)
 {
     test_report<simple_tracer_ctx_t>("simple_tracer_ctx_t_report.log",
-                                     "testdata/simple.txt");
+                                     "../tests/data/simple.txt");
 }
 
 TEST(suite, stack_tracer_ctx_t_report)
 {
     test_report<stack_tracer_ctx_t>("stack_tracer_ctx_t_report.log",
-                                    "testdata/stack.txt");
+                                    "../tests/data/stack.txt");
 }
 
 TEST(suite, thread_tracer_ctx_t_report)
 {
     test_report<thread_tracer_ctx_t>("thread_tracer_ctx_t_report.log",
-                                     "testdata/thread.txt");
+                                     "../tests/data/thread.txt");
 }

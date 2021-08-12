@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 PREFIX=$PWD/local
@@ -66,6 +66,20 @@ add_cmake_flags() {
     fi
 }
 
+build='.build'
+
+gen_make() {
+    echo "build:"
+    echo "\t\$(MAKE) -C $build"
+    echo "%:"
+    echo "\t\$(MAKE) -C $build \$@"
+}
+
+W=$PWD
 parse_args $@
 add_cmake_flags
-cmake . ${CMAKE_FLAGS}
+mkdir -p $build
+cd $build
+cmake $W ${CMAKE_FLAGS}
+echo "\tgenerate Makefile"
+gen_make >$W/Makefile
