@@ -1,6 +1,18 @@
+
 #pragma once
 #include <limits>
 #include <utility>
+
+template <typename T, T unit, typename F>
+struct basic_monoid_accumulator_t {
+    using S = T;
+
+    static constexpr S init = unit;
+
+    T operator()(T acc, const T &x) const { return F()(acc, x); }
+
+    T operator()(T acc) const { return acc; }
+};
 
 template <typename T>
 struct count_accumulator {
@@ -18,37 +30,25 @@ struct count_accumulator {
 };
 
 template <typename T>
-struct sum_accumulator {
-    using S = T;
+using sum_accumulator = basic_monoid_accumulator_t<T, 0, std::plus<T>>;
 
-    static constexpr S init = 0;
-
-    T operator()(T acc, const T &x) const { return acc + x; }
-
-    T operator()(T acc) const { return acc; }
+template <typename T>
+struct std_min {
+    T operator()(const T &x, const T &y) const { return std::min(x, y); }
 };
 
 template <typename T>
-struct min_accumulator {
-    using S = T;
-
-    static constexpr S init = std::numeric_limits<T>::max();
-
-    T operator()(T acc, const T &x) const { return std::min(acc, x); }
-
-    T operator()(T acc) const { return acc; }
+struct std_max {
+    T operator()(const T &x, const T &y) const { return std::max(x, y); }
 };
 
 template <typename T>
-struct max_accumulator {
-    using S = T;
+using min_accumulator =
+    basic_monoid_accumulator_t<T, std::numeric_limits<T>::max(), std_min<T>>;
 
-    static constexpr S init = std::numeric_limits<T>::lowest();
-
-    T operator()(T acc, const T &x) const { return std::max(acc, x); }
-
-    T operator()(T acc) const { return acc; }
-};
+template <typename T>
+using max_accumulator =
+    basic_monoid_accumulator_t<T, std::numeric_limits<T>::min(), std_max<T>>;
 
 template <typename T, typename N = uint32_t>
 struct mean_accumulator {
