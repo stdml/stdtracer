@@ -24,6 +24,18 @@ class scope_t_
     ~scope_t_() { ctx.out(name, since<double, clock_t>(t0)); }
 };
 
+template <typename ctx_t, typename clock_t = std::chrono::high_resolution_clock>
+class site_scope_t_
+{
+    const std::chrono::time_point<clock_t> t0;
+    ctx_t &ctx;
+
+  public:
+    site_scope_t_(ctx_t &ctx) : t0(clock_t::now()), ctx(ctx) { ctx.in(); }
+
+    ~site_scope_t_() { ctx.out(since<double, clock_t>(t0)); }
+};
+
 template <typename clock_t, typename... ctx_t>
 class multi_ctx_scope_t_
 {
@@ -35,7 +47,7 @@ class multi_ctx_scope_t_
     std::tuple<ctx_t &...> _ctxs;
 
   public:
-    multi_ctx_scope_t_(const std::string &name, ctx_t &... ctxs)
+    multi_ctx_scope_t_(const std::string &name, ctx_t &...ctxs)
         : name(name), t0(clock_t::now()), _ctxs({ctxs...})
     {
         all_in(_ctxs, name);

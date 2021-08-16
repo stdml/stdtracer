@@ -9,15 +9,35 @@ inline bool std_isatty(FILE *fp) { return isatty(fileno(fp)); }
 inline bool std_isatty(FILE *fp) { return false; }
 #endif
 
-struct xterm_t {
+class xterm_t
+{
+    uint8_t b;
+    uint8_t f;
+
+  public:
+    xterm_t(uint8_t b, uint8_t f) : b(b), f(f) {}
+
+    const char *operator()(const char *s) const
+    {
+        static thread_local char line[1 << 8];
+        std::sprintf(line, "\e[%u;%um%s\e[m", b, f, s);
+        return line;
+    }
+};
+
+inline const xterm_t xt_red(1, 31);
+inline const xterm_t xt_green(1, 32);
+inline const xterm_t xt_yellow(1, 33);
+
+struct with_xterm_t {
     const bool is_tty;
 
-    xterm_t(uint8_t b, uint8_t f) : is_tty(std_isatty(stdout))
+    with_xterm_t(uint8_t b, uint8_t f) : is_tty(std_isatty(stdout))
     {
         if (is_tty) { std::fprintf(stdout, "\e[%u;%um", b, f); }
     }
 
-    ~xterm_t()
+    ~with_xterm_t()
     {
         if (is_tty) { std::fprintf(stdout, "\e[m"); }
     }
@@ -25,6 +45,6 @@ struct xterm_t {
 
 #define WITH_XTERM(b, f, e)                                                    \
     {                                                                          \
-        xterm_t _(b, f);                                                       \
+        with_xterm_t _(b, f);                                                  \
         e;                                                                     \
     }
