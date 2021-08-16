@@ -7,3 +7,7 @@
 #define TRACE_STMT(e) e;
 #define TRACE_EXPR(e) e
 #define DEFINE_TRACE_CONTEXTS
+
+#define TRACE_SITE_SCOPE(name)
+#define TRACE_SITE_STMT(e) e;
+#define TRACE_SITE_EXPR(e) e
