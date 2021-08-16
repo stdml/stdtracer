@@ -1,0 +1,7 @@
+// -*- mode: c++ -*-
+#pragma once
+#include <tracer/bits/rate.hpp>
+
+#define TRACE_SITE_SCOPE_RATE(name, unit, n)                                   \
+    static rate_ctx_t_ __ctx(name, unit);                                      \
+    rate_scope_t_ __scope(__ctx, n);
