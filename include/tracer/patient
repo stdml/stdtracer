@@ -1,0 +1,32 @@
+// -*- mode: c++ -*-
+#pragma once
+#include <cstdio>
+
+#include <tracer/bits/patient.hpp>
+
+#define WITH_PATIENT(name, n) patient_t_ __patient(n, name);
+
+/*
+#define ASK_PATIENT_WITH(msg)                                                  \
+    {                                                                          \
+        if (!__patient.ok()) {                                                 \
+            fprintf(stderr, "%s\n", msg);                                      \
+            __patient.reset();                                                 \
+        }                                                                      \
+    }
+*/
+
+#define ASK_PATIENT(msg)                                                       \
+    {                                                                          \
+        if (!__patient.ok()) {                                                 \
+            __patient.report(msg);                                             \
+            __patient.reset();                                                 \
+        }                                                                      \
+    }
+
+#define ASK_PATIENT_(fmt, ...)                                                 \
+    {                                                                          \
+        char msg[128];                                                         \
+        sprintf(msg, fmt, __VA_ARGS__);                                        \
+        ASK_PATIENT(msg)                                                       \
+    }
