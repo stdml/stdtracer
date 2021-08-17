@@ -45,30 +45,3 @@ class simple_site_ctx_t_
         duration_ += d;
     }
 };
-
-using simple_site_ctx_t =
-    simple_site_ctx_t_<default_clock_t, default_duration_t>;
-
-using site_tracer_t = site_scope_t_<simple_site_ctx_t>;
-
-#define __DEF_SITE_SCOPE(name, f, l)                                           \
-    static simple_site_ctx_t ___ctx(f, l, name);                               \
-    site_tracer_t __site(___ctx);
-
-#define _TRACE_SITE_SCOPE(name, f, l) __DEF_SITE_SCOPE(name, f, l)
-
-#define _TRACE_SITE_STMT(e, f, l)                                              \
-    {                                                                          \
-        __DEF_SITE_SCOPE(#e, f, l)                                             \
-        e;                                                                     \
-    }
-
-#define _TRACE_SITE_EXPR(e, f, l)                                              \
-    [&] {                                                                      \
-        __DEF_SITE_SCOPE(#e, f, l)                                             \
-        return (e);                                                            \
-    }()
-
-#define TRACE_SITE_SCOPE(name) _TRACE_SITE_SCOPE(name, __FILE__, __LINE__)
-#define TRACE_SITE_STMT(e) _TRACE_SITE_STMT(e, __FILE__, __LINE__)
-#define TRACE_SITE_EXPR(e) _TRACE_SITE_EXPR(e, __FILE__, __LINE__)

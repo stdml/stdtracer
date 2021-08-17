@@ -12,16 +12,19 @@ class rate_reporter_t_
     const std::string name_;
     const std::string unit_;
     FILE *fp_;
+    bool report_;
 
   public:
     explicit rate_reporter_t_(std::string name, std::string unit,
                               FILE *fp = stderr)
-        : name_(std::move(name)), unit_(std::move(unit)), fp_(fp)
+        : name_(std::move(name)), unit_(std::move(unit)), fp_(fp),
+          report_(report_stdout())
     {
     }
 
     void operator()(D d, N n, const char *prefix) const
     {
+        if (!report_) { return; }
         fprintf(fp_, "%s%.2f %s/sec | %s\n", prefix, (double)n / d.count(),
                 unit_.c_str(), name_.c_str());
     }
