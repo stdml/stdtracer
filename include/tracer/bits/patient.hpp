@@ -67,7 +67,7 @@ class patient_t_
     {
         if (!report_) { return; }
         Duration d = Clock::now() - t0_;
-        fprintf(fp_, "%s%s %s, took %.2f | %s\n", prefix,
+        fprintf(fp_, "%s%s %s, took %.2fs | %s\n", prefix,
                 xt_yellow("still running"), msg.c_str(), d.count(),
                 name_.c_str());
     }
