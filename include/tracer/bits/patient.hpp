@@ -21,10 +21,27 @@ class patient_t_
     FILE *fp_;
     bool report_;
 
+    static int get_default_patient()
+    {
+        constexpr const char *STD_TRACER_PATIENT = "STD_TRACER_PATIENT";
+        const char *ptr = std::getenv(STD_TRACER_PATIENT);
+        if (ptr) {
+            int n;
+            if (sscanf(ptr, "%d", &n) == 1) { return n; }
+            fprintf(stderr, "invalid env: %s=%s\n", STD_TRACER_PATIENT, ptr);
+        }
+        return 2;
+    }
+
   public:
     static constexpr const char *prefix = "[patient] ";
 
-    patient_t_(int n, std::string name = "")
+    patient_t_(std::string name = "")
+        : patient_t_(std::move(name), get_default_patient())
+    {
+    }
+
+    patient_t_(std::string name, int n)
         : patient_t_(std::chrono::seconds(n), name)
     {
     }

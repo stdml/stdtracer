@@ -4,7 +4,7 @@
 
 #include <tracer/bits/patient.hpp>
 
-#define WITH_PATIENT(name, n) patient_t_ __patient(n, name);
+#define WITH_PATIENT(...) patient_t_ __patient(__VA_ARGS__);
 
 /*
 #define ASK_PATIENT_WITH(msg)                                                  \
