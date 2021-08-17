@@ -16,10 +16,23 @@ class site_reporter_
     FILE *fp_;
     bool report_;
 
+    static std::string remove_prefix(std::string filepath)
+    {
+#ifdef STD_TRACER_SRC_ROOT_DIR
+        static constexpr const char *SRC_DIR = STD_TRACER_SRC_ROOT_DIR;
+        static const int l = strlen(SRC_DIR);
+        if (strncmp(SRC_DIR, filepath.c_str(), l) == 0) {
+            filepath.erase(filepath.begin(), filepath.begin() + l);
+            filepath = '.' + filepath;
+        }
+#endif
+        return filepath;
+    }
+
   public:
     site_reporter_(std::string filename, int lino, std::string name)
-        : filename_(std::move(filename)), lino_(lino), name_(std::move(name)),
-          fp_(stderr), report_(report_stdout())
+        : filename_(remove_prefix(std::move(filename))), lino_(lino),
+          name_(std::move(name)), fp_(stderr), report_(report_stdout())
     {
     }
 
@@ -29,7 +42,7 @@ class site_reporter_
         if (!report_) { return; }
         fprintf(fp_,
                 "%%%% site called %8" PRId32
-                " times, mean: %8.3fms, total: %8.3fs, file://%s:%d : %s\n",
+                " times, mean: %8.3fms, total: %8.3fs, %s:%d : %s\n",
                 n, d.count() * 1e3 / n, d.count(), filename_.c_str(), lino_,
                 name_.c_str());
     }
