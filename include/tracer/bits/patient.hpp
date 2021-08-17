@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 
-// #include <stdml/bits/collective/stat.hpp>  // for rchan::show_duration
+#include <tracer/bits/stdtracer_xterm.hpp>
 
 class patient_t_
 {
@@ -16,6 +16,8 @@ class patient_t_
     const Duration threshold_;
     Instant last_;
     bool always_ok_;
+
+    static constexpr const char *prefix = "[patient] ";
 
   public:
     patient_t_(int n, std::string name = "")
@@ -34,18 +36,17 @@ class patient_t_
     {
         Duration d = Clock::now() - t0_;
         if (!always_ok_) {
-            fprintf(stderr, "eventually finished in %.2fs | %s\n", d.count(),
-                    name_.c_str());
+            fprintf(stderr, "%s%s in %.2fs | %s\n", prefix,
+                    xt_green("eventually finished"), d.count(), name_.c_str());
         }
     }
-
-    // std::string show() const { return rchan::show_duration(threshold_); }
 
     void report(std::string msg) const
     {
         Duration d = Clock::now() - t0_;
-        fprintf(stderr, "still running %s, took %.2f | %s\n", msg.c_str(),
-                d.count(), name_.c_str());
+        fprintf(stderr, "%s%s %s, took %.2f | %s\n", prefix,
+                xt_yellow("still running"), msg.c_str(), d.count(),
+                name_.c_str());
     }
 
     void reset()
