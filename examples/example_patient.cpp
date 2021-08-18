@@ -21,7 +21,7 @@ void g(int n = 41)
     std::mt19937 gen32(rd());
     WITH_PATIENT(__func__, 1);
     for (int i = 0; i < 10; ++i) {
-        ASK_PATIENT_("computing fibo %d/%d", i, 10);
+        YIELD_PATIENT_("computing fibo %d/%d", i, 10);
         f(n + gen32() % 2);
     }
 }

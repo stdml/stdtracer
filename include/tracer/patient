@@ -7,7 +7,7 @@
 #define WITH_PATIENT(...) patient_t_ __patient(__VA_ARGS__);
 
 /*
-#define ASK_PATIENT_WITH(msg)                                                  \
+#define YIELD_PATIENT_WITH(msg)                                                  \
     {                                                                          \
         if (!__patient.ok()) {                                                 \
             fprintf(stderr, "%s\n", msg);                                      \
@@ -16,7 +16,7 @@
     }
 */
 
-#define ASK_PATIENT(msg)                                                       \
+#define YIELD_PATIENT(msg)                                                       \
     {                                                                          \
         if (!__patient.ok()) {                                                 \
             __patient.report(msg);                                             \
@@ -24,9 +24,9 @@
         }                                                                      \
     }
 
-#define ASK_PATIENT_(fmt, ...)                                                 \
+#define YIELD_PATIENT_(fmt, ...)                                                 \
     {                                                                          \
         char msg[128];                                                         \
         sprintf(msg, fmt, __VA_ARGS__);                                        \
-        ASK_PATIENT(msg)                                                       \
+        YIELD_PATIENT(msg)                                                       \
     }
