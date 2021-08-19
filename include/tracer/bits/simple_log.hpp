@@ -21,6 +21,11 @@ extern log_tracer_ctx_t default_log_ctx;
 #define TRACE_SCOPE(name)                                                      \
     _TRACE_SCOPE(name, tracer_t, default_simple_ctx, default_log_ctx)
 
+#define TRACE_SCOPE_(fmt, ...)                                                 \
+    static char __scope_name[256];                                             \
+    sprintf(__scope_name, fmt, __VA_ARGS__);                                   \
+    _TRACE_SCOPE(__scope_name, tracer_t, default_simple_ctx, default_log_ctx)
+
 #define TRACE_STMT(e)                                                          \
     _TRACE_STMT(e, tracer_t, default_simple_ctx, default_log_ctx)
 
