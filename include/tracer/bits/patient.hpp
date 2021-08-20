@@ -55,6 +55,7 @@ class patient_t_
 
     ~patient_t_()
     {
+        static const xterm_t xt_green(1, 32);
         if (!report_) { return; }
         Duration d = Clock::now() - t0_;
         if (!always_ok_) {
@@ -65,6 +66,7 @@ class patient_t_
 
     void report(std::string msg) const
     {
+        static const xterm_t xt_yellow(1, 33);
         if (!report_) { return; }
         Duration d = Clock::now() - t0_;
         fprintf(fp_, "%s%s %s, took %.2fs | %s\n", prefix,
