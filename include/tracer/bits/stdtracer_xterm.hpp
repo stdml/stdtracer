@@ -25,9 +25,10 @@ class xterm_t
     }
 };
 
-inline const xterm_t xt_red(1, 31);
-inline const xterm_t xt_green(1, 32);
-inline const xterm_t xt_yellow(1, 33);
+//  error: inline specifier allowed on function declarations only
+// inline const xterm_t xt_red(1, 31);
+// inline const xterm_t xt_green(1, 32);
+// inline const xterm_t xt_yellow(1, 33);
 
 struct with_xterm_t {
     const bool is_tty;

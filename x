@@ -1,0 +1,2 @@
+./INSTALL
+PREFIX=$HOME/opt/stdml ./INSTALL
