@@ -42,7 +42,12 @@ class patient_t_
     }
 
     patient_t_(std::string name, int n)
-        : patient_t_(std::chrono::seconds(n), name)
+        : patient_t_(std::chrono::seconds(n), std::move(name))
+    {
+    }
+
+    patient_t_(std::string name, Duration threshold)
+        : patient_t_(threshold, std::move(name))
     {
     }
 
