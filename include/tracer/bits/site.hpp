@@ -10,8 +10,8 @@
 class site_reporter_
 {
     const std::string filename_;
-    const std::string name_;
     const int lino_;
+    const std::string name_;
 
     FILE *fp_;
     bool report_;
