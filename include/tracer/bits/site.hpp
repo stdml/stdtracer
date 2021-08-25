@@ -7,12 +7,51 @@
 #include <tracer/bits/config.hpp>
 #include <tracer/bits/stdtracer_scope.hpp>
 
+class site_reporter_
+{
+    const std::string filename_;
+    const int lino_;
+    const std::string name_;
+
+    FILE *fp_;
+    bool report_;
+
+    static std::string remove_prefix(std::string filepath)
+    {
+#ifdef STD_TRACER_SRC_ROOT_DIR
+        static constexpr const char *SRC_DIR = STD_TRACER_SRC_ROOT_DIR;
+        static const int l = strlen(SRC_DIR);
+        if (strncmp(SRC_DIR, filepath.c_str(), l) == 0) {
+            filepath.erase(filepath.begin(), filepath.begin() + l);
+            filepath = '.' + filepath;
+        }
+#endif
+        return filepath;
+    }
+
+  public:
+    site_reporter_(std::string filename, int lino, std::string name)
+        : filename_(remove_prefix(std::move(filename))), lino_(lino),
+          name_(std::move(name)), fp_(stderr), report_(report_stdout())
+    {
+    }
+
+    template <typename D, typename N>
+    void operator()(D d, N n) const
+    {
+        if (!report_) { return; }
+        fprintf(fp_,
+                "%%%% site called %8" PRId32
+                " times, mean: %8.3fms, total: %8.3fs, %s:%d : %s\n",
+                n, d.count() * 1e3 / n, d.count(), filename_.c_str(), lino_,
+                name_.c_str());
+    }
+};
+
 template <typename clock_t, typename duration_t>
 class simple_site_ctx_t_
 {
-    const std::string filename_;
-    const std::string name_;
-    const int lino_;
+    site_reporter_ report;
 
     using N = int32_t;
 
@@ -21,18 +60,11 @@ class simple_site_ctx_t_
 
   public:
     simple_site_ctx_t_(std::string filename, int lino, std::string name)
-        : filename_(std::move(filename)), lino_(lino), name_(std::move(name))
+        : report(std::move(filename), lino, std::move(name))
     {
     }
 
-    ~simple_site_ctx_t_()
-    {
-        fprintf(stderr,
-                "%%%% site called %8" PRId32
-                " times, mean: %8.3fms, total: %8.3fs, file://%s:%d : %s\n",
-                count_, duration_.count() * 1e3 / count_, duration_.count(),
-                filename_.c_str(), lino_, name_.c_str());
-    }
+    ~simple_site_ctx_t_() { report(duration_, count_); }
 
     void in()
     {
@@ -45,30 +77,3 @@ class simple_site_ctx_t_
         duration_ += d;
     }
 };
-
-using simple_site_ctx_t =
-    simple_site_ctx_t_<default_clock_t, default_duration_t>;
-
-using site_tracer_t = site_scope_t_<simple_site_ctx_t>;
-
-#define __DEF_SITE_SCOPE(name, f, l)                                           \
-    static simple_site_ctx_t ___ctx(f, l, name);                               \
-    site_tracer_t __site(___ctx);
-
-#define _TRACE_SITE_SCOPE(name, f, l) __DEF_SITE_SCOPE(name, f, l)
-
-#define _TRACE_SITE_STMT(e, f, l)                                              \
-    {                                                                          \
-        __DEF_SITE_SCOPE(#e, f, l)                                             \
-        e;                                                                     \
-    }
-
-#define _TRACE_SITE_EXPR(e, f, l)                                              \
-    [&] {                                                                      \
-        __DEF_SITE_SCOPE(#e, f, l)                                             \
-        return (e);                                                            \
-    }()
-
-#define TRACE_SITE_SCOPE(name) _TRACE_SITE_SCOPE(name, __FILE__, __LINE__)
-#define TRACE_SITE_STMT(e) _TRACE_SITE_STMT(e, __FILE__, __LINE__)
-#define TRACE_SITE_EXPR(e) _TRACE_SITE_EXPR(e, __FILE__, __LINE__)

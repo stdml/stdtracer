@@ -1,0 +1,22 @@
+// -*- mode: c++ -*-
+#pragma once
+#include <cstdio>
+
+#include <tracer/bits/patient.hpp>
+
+#define WITH_PATIENT(...) patient_t_ __patient(__VA_ARGS__);
+
+#define YIELD_PATIENT(msg)                                                     \
+    {                                                                          \
+        if (!__patient.ok()) {                                                 \
+            __patient.report(msg);                                             \
+            __patient.reset();                                                 \
+        }                                                                      \
+    }
+
+#define YIELD_PATIENT_(fmt, ...)                                               \
+    {                                                                          \
+        char msg[128];                                                         \
+        sprintf(msg, fmt, __VA_ARGS__);                                        \
+        YIELD_PATIENT(msg)                                                     \
+    }
