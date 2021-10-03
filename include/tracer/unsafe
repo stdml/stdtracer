@@ -1,0 +1,15 @@
+// -*- mode: c++ -*-
+#pragma once
+#include <tracer/bits/unsafe.hpp>
+
+#define UNSAFE_EXPR_HINT_(e, hint, file, line)                                 \
+    [&]() {                                                                    \
+        unsafe_guard_t __unsafe_call(file, line, hint);                        \
+        const auto __unsafe_closure = [&] { return (e); };                     \
+        return __unsafe_call(__unsafe_closure);                                \
+    }()
+
+#define UNSAFE_EXPR_HINT(e, hint)                                              \
+    UNSAFE_EXPR_HINT_((e), hint, __FILE__, __LINE__)
+
+#define UNSAFE_EXPR(e) UNSAFE_EXPR_HINT_((e), #e, __FILE__, __LINE__)
