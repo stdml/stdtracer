@@ -60,23 +60,22 @@ class patient_t_
 
     ~patient_t_()
     {
-        static const xterm_t xt_green(1, 32);
+        xterm_t ok(1, 32, !std_isatty(fp_));
         if (!report_) { return; }
         Duration d = Clock::now() - t0_;
         if (!always_ok_) {
             fprintf(fp_, "%s%s in %.2fs | %s\n", prefix,
-                    xt_green("eventually finished"), d.count(), name_.c_str());
+                    ok("eventually finished"), d.count(), name_.c_str());
         }
     }
 
     void report(std::string msg) const
     {
-        static const xterm_t xt_yellow(1, 33);
+        xterm_t warn(1, 33, !std_isatty(fp_));
         if (!report_) { return; }
         Duration d = Clock::now() - t0_;
         fprintf(fp_, "%s%s %s, took %.2fs | %s\n", prefix,
-                xt_yellow("still running"), msg.c_str(), d.count(),
-                name_.c_str());
+                warn("still running"), msg.c_str(), d.count(), name_.c_str());
     }
 
     void reset()

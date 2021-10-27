@@ -13,12 +13,17 @@ class xterm_t
 {
     uint8_t b;
     uint8_t f;
+    bool disabled;
 
   public:
-    xterm_t(uint8_t b, uint8_t f) : b(b), f(f) {}
+    xterm_t(uint8_t b, uint8_t f, bool disabled = false)
+        : b(b), f(f), disabled(disabled)
+    {
+    }
 
     const char *operator()(const char *s) const
     {
+        if (disabled) { return s; }
         static thread_local char line[1 << 8];
         std::sprintf(line, "\e[%u;%um%s\e[m", b, f, s);
         return line;
