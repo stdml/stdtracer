@@ -75,7 +75,8 @@ class rate_ctx_t_
 
   public:
     explicit rate_ctx_t_(std::string name, std::string unit, FILE *fp = stderr)
-        : reporter_(std::move(name), std::move(unit), fp)
+        : reporter_(std::move(name), std::move(unit), fp), amount_(0),
+          duration_(0)
     {
     }
 
