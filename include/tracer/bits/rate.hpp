@@ -6,6 +6,29 @@
 #include <tracer/bits/stdtracer_base.hpp>
 #include <tracer/bits/stdtracer_xterm.hpp>
 
+class auto_binary_ratio
+{
+    static constexpr const char *One = "";
+    static constexpr const char *Kili = "Ki";
+    static constexpr const char *Megi = "Mi";
+    static constexpr const char *Gigi = "Gi";
+
+    static constexpr const int64_t ki = 1 << 10;
+    static constexpr const int64_t mi = ki << 10;
+    static constexpr const int64_t gi = mi << 10;
+
+    using P = std::pair<double, const char *>;
+
+  public:
+    P operator()(double n) const
+    {
+        if (n >= gi) { return P(n / gi, Gigi); }
+        if (n >= mi) { return P(n / mi, Megi); }
+        if (n >= ki) { return P(n / ki, Kili); }
+        return P(n, One);
+    }
+};
+
 template <typename D, typename N>
 class rate_reporter_t_
 {
@@ -25,8 +48,15 @@ class rate_reporter_t_
     void operator()(D d, N n, const char *prefix) const
     {
         if (!report_) { return; }
-        fprintf(fp_, "%s%.2f %s/sec | %s\n", prefix, (double)n / d.count(),
-                unit_.c_str(), name_.c_str());
+        const double r = static_cast<double>(n) / d.count();
+        if (unit_ == "B") {
+            const auto [rr, uu] = auto_binary_ratio()(r);
+            fprintf(fp_, "%s%.3f %s%s/sec | %s\n", prefix, rr, uu,
+                    unit_.c_str(), name_.c_str());
+        } else {
+            fprintf(fp_, "%s%.2f %s/sec | %s\n", prefix, r, unit_.c_str(),
+                    name_.c_str());
+        }
     }
 
     void operator()(D d, N n) const { (*this)(d, n, "%%%% "); }
