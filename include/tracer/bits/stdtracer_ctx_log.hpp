@@ -42,9 +42,9 @@ class log_tracer_ctx_t_
         char *p = buffer + std::strlen(buffer);
         [&](double t) {
             if (t < 1) {
-                std::sprintf(p, "] took %.2fms", t * 1000);
+                std::sprintf_s(p, 512 - 1, "] took %.2fms", t * 1000);
             } else {
-                std::sprintf(p, "] took %.2fs", t);
+                std::sprintf_s(p, 512 - 1, "] took %.2fs", t);
             }
         }(d.count());
         indent(fp_);
@@ -58,7 +58,7 @@ class log_tracer_ctx_t_
     }
 
     template <typename... Args>
-    void logf1(FILE *fp, const Args &... args)
+    void logf1(FILE *fp, const Args &...args)
     {
         std::fprintf(fp, "// ");
         std::fprintf(fp, args...);
@@ -66,7 +66,7 @@ class log_tracer_ctx_t_
     }
 
     template <typename... Args>
-    void logf(const Args &... args)
+    void logf(const Args &...args)
     {
         for (auto fp : log_files) {
             if (fp == stdout) { indent(fp); }
