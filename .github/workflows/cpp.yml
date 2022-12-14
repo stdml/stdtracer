@@ -1,0 +1,21 @@
+---
+name: CPP
+'on':
+- push
+- pull_request
+- workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - run: |-
+        sudo apt install -y libgtest-dev
+        mkdir /tmp/gtest && cd /tmp/gtest
+        cmake /usr/src/googletest -DCMAKE_CXX_FLAGS=-std=c++11 -Dgtest_disable_pthreads=1
+        make -j $(nproc)
+        sudo make install
+      name: Install gtest
+    - run: ./configure --examples --tests --benchmarks
+    - run: make -j $(nproc)
+    - run: make test
