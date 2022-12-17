@@ -16,6 +16,6 @@ jobs:
         make -j $(nproc)
         sudo make install
       name: Install gtest
-    - run: ./configure --examples --tests --benchmarks
+    - run: ./configure --examples --tests --benchmarks --deb
     - run: make -j $(nproc)
     - run: make test
