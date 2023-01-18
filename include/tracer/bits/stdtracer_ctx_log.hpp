@@ -42,9 +42,9 @@ class log_tracer_ctx_t_
         char *p = buffer + std::strlen(buffer);
         [&](double t) {
             if (t < 1) {
-                std::sprintf_s(p, 512 - 1, "] took %.2fms", t * 1000);
+                std::snprintf(p, 512, "] took %.2fms", t * 1000);
             } else {
-                std::sprintf_s(p, 512 - 1, "] took %.2fs", t);
+                std::snprintf(p, 512, "] took %.2fs", t);
             }
         }(d.count());
         indent(fp_);

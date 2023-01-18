@@ -25,8 +25,7 @@ class xterm_t
     {
         if (disabled) { return s; }
         static thread_local char line[1 << 8];
-        // ‘sprintf_s’ is not a member of ‘std’
-        sprintf_s(line, (1 << 8) - 1, "\e[%u;%um%s\e[m", b, f, s);
+        snprintf(line, (1 << 8), "\e[%u;%um%s\e[m", b, f, s);
         return line;
     }
 };
