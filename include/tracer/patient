@@ -17,6 +17,6 @@
 #define YIELD_PATIENT_(fmt, ...)                                               \
     {                                                                          \
         char msg[128];                                                         \
-        sprintf(msg, fmt, __VA_ARGS__);                                        \
+        snprintf(msg, 128, fmt, __VA_ARGS__);                                  \
         YIELD_PATIENT(msg)                                                     \
     }

@@ -25,7 +25,7 @@ class xterm_t
     {
         if (disabled) { return s; }
         static thread_local char line[1 << 8];
-        std::sprintf(line, "\e[%u;%um%s\e[m", b, f, s);
+        snprintf(line, (1 << 8), "\e[%u;%um%s\e[m", b, f, s);
         return line;
     }
 };

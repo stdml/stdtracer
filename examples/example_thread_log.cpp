@@ -15,7 +15,7 @@ int fibo(int n)
 void f(int n, int &result)
 {
     char name[64];
-    sprintf(name, "%s(%d)", __func__, n);
+    snprintf(name, 64, "%s(%d)", __func__, n);
     TRACE_SCOPE(name);
     result = fibo(n);
 }
