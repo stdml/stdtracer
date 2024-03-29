@@ -28,6 +28,9 @@ parse_args() {
         --benchmarks)
             BUILD_BENCHMARKS=1
             ;;
+        --deb)
+            BUILD_DEB=1
+            ;;
         --verbose)
             VERBOSE=1
             ;;
@@ -57,6 +60,9 @@ add_cmake_flags() {
     add_cmake_flag BUILD_EXAMPLES ${BUILD_EXAMPLES}
     add_cmake_flag BUILD_TESTS ${BUILD_TESTS}
 
+    if [ "$BUILD_DEB" = 1 ]; then
+        add_cmake_flag BUILD_DEB $BUILD_DEB
+    fi
     if [ ${BUILD_CUDA_EXAMPLES} -eq 1 ]; then
         add_cmake_flag CMAKE_CUDA_COMPILER $CUDA_HOME/bin/nvcc
         add_cmake_flag CUDA_TOOLKIT_ROOT_DIR $CUDA_HOME
